@@ -1,2 +1,2 @@
-# PersFin
-Personal finance webapp
+# FinHeal
+Financial health webapp
