@@ -1,0 +1,103 @@
+/*  
+ * general
+ */ 
+body {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	border: 0;
+}
+
+/*
+ * Frame setting
+ */
+.block_outter_frame {
+  border:0;
+  border-radius:5px;
+  margin:0;
+  padding:0;
+  position:relative;
+}
+
+.block_inner_frame {
+  border:0;
+  margin:0 0 0 3px;    /* set left margin to 3px */
+  padding:3px;
+}
+
+/*
+ * App specific settings
+ */
+.block_title {
+  padding:3px 0;
+  color:rgba(255,250,250,1);     /* snow */
+  font-weight:bold;
+}
+.macro_block {
+  border: 0;
+  border-radius: 1px;
+  padding: 0;
+  margin: 1px 0;
+}
+.micro_block {
+  border: 0;
+  border-radius: 1px;
+  padding: 0;
+  margin: 1px 0;
+  height: 440px;
+}
+.nano_block {
+  border: 0;
+  border-radius: 1px;
+  padding: 0px 0px;
+  margin: 1px 0px;
+  height: 108px;
+}
+.blotter_fields {
+  padding: 0px 5px;
+  margin: 0px 5px;
+  width: 80px;
+  float: left;
+}
+.blotter_fields_wide {
+  padding: 0px 5px;
+  margin: 0px 5px;
+  width: 150px;
+  float: left;
+}
+.blotter_fields {
+  padding: 0px 5px;
+  margin: 0px 5px;
+  width: 80px;
+  float: left;
+}
+
+.blotter_fields_right {
+  padding: 0px 5px;
+  margin: 0px 5px;
+  width: 90px;
+  float: right;
+}
+#ticker_search, #ticker_search_submit, #ticker_news, #ticker_news_submit,
+#eq_perf_period, #eq_perf_period_submit, #tb_perf_period, #tb_perf_period_submit, 
+#cb_perf_period, #cb_perf_period_submit, #add_trade_list, #add_trade_list_submit {
+  padding: 0px 0px;
+  margin: 0px 0px;
+  height: 35px;
+}
+#portfolio_dt{
+  /*background-color: #000000;*/
+}
+.add_trade_list, .add_trade_list_submit{
+  width:200px;
+}
+
+/* task_div setting */
+.task_div {
+  margin:3px;
+  padding:2px;
+  float:left;
+}
+
+.task_cat_div {
+  font-weight:bold;
+}
