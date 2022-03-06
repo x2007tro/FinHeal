@@ -25,11 +25,17 @@ WriteDataToSS(db_obj, frame_account_tbl, '* Frame 05 : Data Table *')
 frame_account_tbl <- readxl::read_excel('./updater/source.xlsx', sheet = 'frame11 property')
 WriteDataToSS(db_obj, frame_account_tbl, '* Frame 11 : Property *')
 
-frame_account_tbl <- readxl::read_excel('./updater/source.xlsx', sheet = 'frame12 property tax')
-WriteDataToSS(db_obj, frame_account_tbl, '* Frame 12 : Property Tax *')
+frame_account_tbl <- readxl::read_excel('./updater/source.xlsx', sheet = 'frame12 property value')
+WriteDataToSS(db_obj, frame_account_tbl, '* Frame 12 : Property Value *')
 
-frame_account_tbl <- readxl::read_excel('./updater/source.xlsx', sheet = 'frame13 amortization')
-WriteDataToSS(db_obj, frame_account_tbl, '* Frame 13 : Amortization *')
+frame_account_tbl <- readxl::read_excel('./updater/source.xlsx', sheet = 'frame13 property tax rates')
+WriteDataToSS(db_obj, frame_account_tbl, '* Frame 13 : Property Tax Rates *')
+
+frame_account_tbl <- readxl::read_excel('./updater/source.xlsx', sheet = 'frame14 amortization')
+WriteDataToSS(db_obj, frame_account_tbl, '* Frame 14 : Amortization *')
+
+frame_account_tbl <- readxl::read_excel('./updater/source.xlsx', sheet = 'frame20 interest rates')
+WriteDataToSS(db_obj, frame_account_tbl, '* Frame 20 : Interest Rates *')
 
 frame_account_tbl <- readxl::read_excel('./updater/source.xlsx', sheet = 'input02 transactions')
 WriteDataToSS(db_obj, frame_account_tbl, '* Input 02 : Transactions *')

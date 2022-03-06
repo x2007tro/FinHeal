@@ -46,6 +46,7 @@ lapply(1:nrow(property_show), function(i){
 			            tags$h3("Basic"),
 			            tags$div(class = "pf_rpt_rntsumm_div", textAreaInput(paste0("pf_rpt_rntsumm_",curr_ppty_id,"_bas_addr"), label = "address", value = property_show$address[i], width = entry_wid_l)),
 			            tags$div(class = "pf_rpt_rntsumm_div", textInput(paste0("pf_rpt_rntsumm_",curr_ppty_id,"_bas_priv"), label = "province", value = property_show$province[i], width = entry_wid_l)),
+			            tags$div(class = "pf_rpt_rntsumm_div", textInput(paste0("pf_rpt_rntsumm_",curr_ppty_id,"_bas_area"), label = "area", value = property_show$area[i], width = entry_wid_l)),
 			            tags$div(class = "pf_rpt_rntsumm_div", textInput(paste0("pf_rpt_rntsumm_",curr_ppty_id,"_bas_otype"), label = "ownership type", value = property_show$ownership[i], width = entry_wid_l)),
 			            tags$div(class = "pf_rpt_rntsumm_div", textAreaInput(paste0("pf_rpt_rntsumm_",curr_ppty_id,"_bas_assv"), label = paste0("property tax source"), value = curr_pptytax$source, width = entry_wid_l))
 			          )
@@ -54,12 +55,11 @@ lapply(1:nrow(property_show), function(i){
 			          3,
 			          tags$div(
 			            class = 'block_inner_frame',
-			            tags$h3("Property Value"),
-			            tags$div(class = "pf_rpt_rntsumm_div", numericInput(paste0("pf_rpt_rntsumm_",curr_ppty_id,"_pv_aprv"), label = "appraisal value", value = property_show$appraisal_value[i], width = entry_wid_l)),
-			            tags$div(class = "pf_rpt_rntsumm_div", numericInput(paste0("pf_rpt_rntsumm_",curr_ppty_id,"_pv_assv"), label = paste0("assessment value (", curr_pptytax$assessment_year,")"), value = curr_pptytax$assessment_value, width = entry_wid_l)),
-			            tags$div(class = "pf_rpt_rntsumm_div", numericInput(paste0("pf_rpt_rntsumm_",curr_ppty_id,"_pv_apt"), label = paste0("annual property tax (", curr_pptytax$assessment_year,")"), value = curr_pptytax$annual_amount, width = entry_wid_l)),
-			            tags$div(class = "pf_rpt_rntsumm_div", numericInput(paste0("pf_rpt_rntsumm_",curr_ppty_id,"_pv_aprv"), label = "annual property tax rate", value = curr_pptytax$tax_rate, width = entry_wid_l)),
-			            tags$div(class = "pf_rpt_rntsumm_div", textInput(paste0("pf_rpt_rntsumm_",curr_ppty_id,"_pv_ptt"), label = paste0("property tax type"), value = curr_pptytax$tax_rate_type, width = entry_wid_l))
+			            tags$h3(paste0("Property Value (", curr_pptytax$assessment_year,")")),
+			            tags$div(class = "pf_rpt_rntsumm_div", numericInput(paste0("pf_rpt_rntsumm_",curr_ppty_id,"_pv_aprv"), label = paste0("appraisal value"), value = curr_pptytax$appraisal_value, width = entry_wid_l)),
+			            tags$div(class = "pf_rpt_rntsumm_div", numericInput(paste0("pf_rpt_rntsumm_",curr_ppty_id,"_pv_assv"), label = paste0("assessment value"), value = curr_pptytax$assessment_value, width = entry_wid_l)),
+			            tags$div(class = "pf_rpt_rntsumm_div", numericInput(paste0("pf_rpt_rntsumm_",curr_ppty_id,"_pv_apt"), label = paste0("annual property tax amount"), value = curr_pptytax$annual_amount, width = entry_wid_l)),
+			            tags$div(class = "pf_rpt_rntsumm_div", numericInput(paste0("pf_rpt_rntsumm_",curr_ppty_id,"_pv_aprv"), label = paste0("annual property tax rate"), value = curr_pptytax$tax_rate, width = entry_wid_l))
 			          )
 			        ),
 			        column(

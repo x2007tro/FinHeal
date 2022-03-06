@@ -42,4 +42,9 @@ mainServer <- function(input, output, session) {
   # Load input files
   ##
   source("./iServer/pf_dat_exp.R", local = TRUE)
+  
+  ##
+  # Load input files
+  ##
+  source("./iServer/pf_res_nppty.R", local = TRUE)
 }

@@ -58,13 +58,26 @@ property_show <- property_full %>%
 property_shownact <- property_show %>% 
   dplyr::filter(active == 1)
 
-pptytax_full <- ReadDataFromSS(db_obj, '* Frame 12 : Property Tax *')
-pptytax_show <- pptytax_full %>% 
+pptyval_full <- ReadDataFromSS(db_obj, '* Frame 12 : Property Value *')
+pptyval_show <- pptyval_full %>% 
   dplyr::filter(show == 1) %>% 
   dplyr::arrange(order) %>% 
+  dplyr::select(property_id, assessment_year, assessment_value, appraisal_value)
+
+pptytaxr_full <- ReadDataFromSS(db_obj, '* Frame 13 : Property Tax Rates *')
+pptytaxr_show <- pptytaxr_full %>% 
+  dplyr::filter(show == 1) %>% 
+  dplyr::arrange(order) %>% 
+  dplyr::select(year, ownership, province, area, tax_rate, source)
+
+pptytax_show <- property_show %>% 
+  dplyr::select(id, ownership, province, area) %>% 
+  dplyr::left_join(pptytaxr_show, by = c('ownership','province','area')) %>% 
+  dplyr::rename(property_id = id, assessment_year = year) %>% 
+  dplyr::left_join(pptyval_show, by = c("property_id","assessment_year")) %>% 
   dplyr::mutate(annual_amount = round(assessment_value * tax_rate))
 
-amort_full <- ReadDataFromSS(db_obj, '* Frame 13 : Amortization *')
+amort_full <- ReadDataFromSS(db_obj, '* Frame 14 : Amortization *')
 amort_show <- amort_full %>% 
   dplyr::filter(show == 1) %>% 
   dplyr::arrange(order) %>% 
@@ -83,5 +96,10 @@ taxpar_show <- taxpar_full %>%
 
 taxtbl_full <- ReadDataFromSS(db_obj, '* Input 07 : Personal Income Tax Table *')
 taxtbl_show <- taxtbl_full %>% 
+  dplyr::filter(show == 1) %>% 
+  dplyr::arrange(order)
+
+intrt_full <- ReadDataFromSS(db_obj, '* Frame 20 : Interest Rates *')
+intrt_show <- intrt_full %>% 
   dplyr::filter(show == 1) %>% 
   dplyr::arrange(order)

@@ -112,3 +112,33 @@ PSPPCalc <- function(income, tax_year, person = c("tong_li","ke_min","reserved_1
                c(tax_parameter[[paste0(person,"_pspp_contribution_rate_below_YMPE")]],tax_parameter[[paste0(person,"_pspp_contribution_rate_above_YMPE")]]))
   return(round(pspp))
 }
+
+##
+# Get Financial information
+AmortTableConstr <- function(
+  house_prcs,
+  irs
+){
+  res <- lapply(irs, function(ir){
+    res2 <- lapply(house_prcs, function(hp){
+      mortgage(hp*0.8, ir, 25, T, F)
+      
+      df <- data.frame(
+        `HousePrice` = hp,
+        `DownPaymentRequired` = hp*0.2,
+        `LoanAmount` = hp*0.8,
+        `InterestRate` = ir,
+        `MlyMortgage` = round(monthPay,0),
+        stringsAsFactors = FALSE
+      )
+      df2 <- NULL
+      return(list(df, df2))
+    })
+    tmp1 <- dplyr::bind_rows(lapply(res2,"[[",1))
+    tmp2 <- dplyr::bind_rows(lapply(res2,"[[",2))
+    return(list(tmp1, tmp2))
+  })
+  tmp1 <- dplyr::bind_rows(lapply(res,"[[",1))
+  tmp2 <- dplyr::bind_rows(lapply(res,"[[",2))
+  return(list(ft = tmp1, st = tmp2))
+}
