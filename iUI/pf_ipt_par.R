@@ -22,7 +22,7 @@ pf_ipt_par_tp <- tabPanel(
             )
           )
         )
-      ),
+      )
       
     )
   )
