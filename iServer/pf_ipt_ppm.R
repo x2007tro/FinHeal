@@ -47,7 +47,7 @@ lapply(1:nrow(property_shownact), function(i){
                               tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_inc_other"), label = "other", value = 0, width = entry_wid_l))
                             )
                             
-                          ),
+                          )
                         ),
                         fluidRow(
                           column(
