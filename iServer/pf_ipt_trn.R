@@ -110,8 +110,8 @@ lapply(1:nrow(accounts_show), function(i){
                   
                   tags$div(
                     class = "block_inner_frame",
-                    actionButton(class = "btn-primary", paste0("fp_ipt_trn_",curr_acct_id,"_enter"), "Enter into DB"),
-                    actionButton(class = "btn-success", paste0("fp_ipt_trn_",curr_acct_id,"_clear"), "Clear from DB")
+                    actionButton(class = "btn-success", paste0("fp_ipt_trn_",curr_acct_id,"_enter"), "Enter into DB"),
+                    actionButton(class = "btn-primary", paste0("fp_ipt_trn_",curr_acct_id,"_clear"), "Clear from DB")
                   )
                   
                 )
@@ -127,7 +127,8 @@ lapply(1:nrow(accounts_show), function(i){
   })
   
   observeEvent(input[[paste0("fp_ipt_trn_", curr_acct_id, "_clear")]], {
-    showNotification("Transactions are being removed from  DB...", type = 'message')
+    showNotification("Transactions are being removed from  DB...", type = 'error')
+    
     sql_str <- paste0("DELETE FROM `* Input 02 : Transactions *` WHERE account = '", curr_acct_nm, 
                       "' AND transaction_date >= '", input$pf_ipt_par_begdt, 
                       "' AND transaction_date <= '", input$pf_ipt_par_enddt,"'")
@@ -137,7 +138,7 @@ lapply(1:nrow(accounts_show), function(i){
   
   observeEvent(input[[paste0("fp_ipt_trn_",curr_acct_id,"_enter")]], {
     
-    showNotification("Transactions are being entered to DB...", type = 'error')
+    showNotification("Transactions are being entered to DB...", type = 'message')
     
     dates <- do.call("c", lapply(1:nrow(tasks[[i]]), function(i){input[[paste0("fp_ipt_trn_",curr_acct_id,"_date",i)]]}))
     desc <- do.call("c", lapply(1:nrow(tasks[[i]]), function(i){input[[paste0("fp_ipt_trn_",curr_acct_id,"_desc",i)]]}))

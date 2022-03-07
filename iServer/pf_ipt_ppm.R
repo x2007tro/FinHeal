@@ -115,8 +115,8 @@ lapply(1:nrow(property_shownact), function(i){
                   12,
                   tags$div(
                     class = 'block_inner_frame',
-                    actionButton(class = "btn-primary", paste0("fp_ipt_ppm_",curr_ppty_id,"_enter"), "Enter into DB"),
-                    actionButton(class = "btn-success", paste0("fp_ipt_ppm_",curr_ppty_id,"_clear"), "Clear from DB")
+                    actionButton(class = "btn-success", paste0("fp_ipt_ppm_",curr_ppty_id,"_enter"), "Enter into DB"),
+                    actionButton(class = "btn-primary", paste0("fp_ipt_ppm_",curr_ppty_id,"_clear"), "Clear from DB")
                   )
                   
                 )
@@ -137,6 +137,7 @@ lapply(1:nrow(property_shownact), function(i){
   })
   
   observeEvent(input[[paste0("fp_ipt_ppm_", curr_ppty_id, "_clear")]], {
+    showNotification("Transactions are being removed from  DB...", type = 'error')
     
     sql_str <- paste0("DELETE FROM `* Input 02 : Transactions *` WHERE property = '", curr_ppty_nm, 
                       "' AND transaction_date >= '", input$pf_ipt_par_begdt, 
@@ -148,6 +149,7 @@ lapply(1:nrow(property_shownact), function(i){
   observeEvent(input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_enter")]], {
     
     # Process ppm expense
+    showNotification("Transactions are being entered to DB...", type = 'message')
     
     dates <- input$pf_ipt_par_begdt
     desc <- c('rental income','other income',
