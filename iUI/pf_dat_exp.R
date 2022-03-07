@@ -1,7 +1,7 @@
 ##
 # tab
 pf_dat_exp_tp <- tabPanel(
-  "Transactions",
+  "Raw Transactions",
   
   tabsetPanel(
     tabPanel(

@@ -39,10 +39,9 @@ mainUI <- fluidPage(theme = shinythemes::shinytheme("journal"),
         "Files",
         pf_fle_ul_tp,
         pf_fle_dl_tp,
-        "Data",
-        pf_dat_exp_tp,
         'Resource',
-        pf_res_nppty_tp
+        pf_res_nppty_tp,
+        pf_dat_exp_tp
       )
     ),
     tabPanel(
