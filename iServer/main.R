@@ -6,6 +6,11 @@ mainServer <- function(input, output, session) {
   ##
   # Load input files
   ##
+  source("./iServer/pf_ipt_par.R", local = TRUE)
+  
+  ##
+  # Load input files
+  ##
   source("./iServer/pf_rpt_dashbd.R", local = TRUE)
   
   ##
@@ -27,11 +32,6 @@ mainServer <- function(input, output, session) {
   # Load input files
   ##
   source("./iServer/pf_ipt_trn.R", local = TRUE)
-  
-  ##
-  # Load input files
-  ##
-  source("./iServer/pf_ipt_par.R", local = TRUE)
   
   ##
   # Load input files

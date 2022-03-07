@@ -1,3 +1,174 @@
 #
 # handling economic indicators
 #
+transdata_full <- reactive({
+  
+  withProgress(message = 'Getting transaction details ...', {
+    transdata_full <- ReadDataFromSS(db_obj, '* Input 02 : Transactions *')
+    transdata_full <- transdata_full %>% 
+      dplyr::filter(active == 1) %>% 
+      dplyr::filter(operation_type == 'p') %>% 
+      dplyr::select(-dplyr::one_of('id','active','order','show','entry_datetime') )
+  })
+})
+
+accounts_show <- reactive({
+  
+  withProgress(message = 'Getting transaction details ...', {
+    accounts_full <- ReadDataFromSS(db_obj, '* Frame 01 : Account *')
+    accounts_show <- accounts_full %>% 
+      dplyr::filter(show == 1) %>% 
+      dplyr::arrange(order) %>% 
+      dplyr::select(id, name)
+  })
+})
+
+opertype_show <- reactive({
+  
+  withProgress(message = 'Getting transaction details ...', {
+    opertype_full <- ReadDataFromSS(db_obj, '* Frame 03 : Operation Type *')
+    opertype_show <- opertype_full %>% 
+      dplyr::filter(show == 1) %>% 
+      dplyr::arrange(order) %>% 
+      dplyr::select(id, operation_type)
+  })
+})
+
+transcat_show <- reactive({
+  
+  withProgress(message = 'Getting transaction details ...', {
+    transcat_full <- ReadDataFromSS(db_obj, '* Frame 04 : Transaction Category *')
+    transcat_show <- transcat_full %>% 
+      dplyr::filter(show == 1) %>% 
+      dplyr::arrange(order) %>% 
+      dplyr::select(id, name, hyper_category)
+  })
+})
+
+dattbl_show <- reactive({
+  
+  withProgress(message = 'Getting transaction details ...', {
+    dattbl_full <- ReadDataFromSS(db_obj, '* Frame 05 : Data Table *')
+    dattbl_show <- dattbl_full %>% 
+      dplyr::filter(show == 1) %>% 
+      dplyr::arrange(order) %>% 
+      dplyr::select(id, name)
+  })
+})
+
+autocat_show <- reactive({
+  
+  withProgress(message = 'Getting transaction details ...', {
+    autocat_full <- ReadDataFromSS(db_obj, '* Input 10 : Autocat *')
+    autocat_show <- autocat_full %>% 
+      dplyr::filter(show == 1) %>% 
+      dplyr::arrange(order) %>% 
+      dplyr::mutate(recurring = as.logical(recurring)) %>% 
+      dplyr::select(string, category, recurring, property, multiplier, operation_type, data_table)
+  })
+})
+
+property_show <- reactive({
+  
+  withProgress(message = 'Getting transaction details ...', {
+    property_full <- ReadDataFromSS(db_obj, '* Frame 11 : Property *')
+    property_show <- property_full %>% 
+      dplyr::filter(show == 1) %>% 
+      dplyr::arrange(order)
+  })
+})
+
+property_shownact <- reactive({
+  
+  withProgress(message = 'Getting transaction details ...', {
+    property_shownact <- property_show() %>% 
+      dplyr::filter(active == 1)
+  })
+})
+
+pptyval_show <- reactive({
+  
+  withProgress(message = 'Getting transaction details ...', {
+    pptyval_full <- ReadDataFromSS(db_obj, '* Frame 12 : Property Value *')
+    pptyval_show <- pptyval_full %>% 
+      dplyr::filter(show == 1) %>% 
+      dplyr::arrange(order) %>% 
+      dplyr::select(property_id, assessment_year, assessment_value, appraisal_value)
+  })
+})
+
+pptytaxr_show <- reactive({
+  
+  withProgress(message = 'Getting transaction details ...', {
+    pptytaxr_full <- ReadDataFromSS(db_obj, '* Frame 13 : Property Tax Rates *')
+    pptytaxr_show <- pptytaxr_full %>% 
+      dplyr::filter(show == 1) %>% 
+      dplyr::arrange(order) %>% 
+      dplyr::select(year, ownership, province, area, tax_rate, source)
+  })
+})
+
+pptytax_show <- reactive({
+  
+  withProgress(message = 'Getting transaction details ...', {
+    
+    pptytax_show <- property_show() %>% 
+      dplyr::select(id, ownership, province, area) %>% 
+      dplyr::left_join(pptytaxr_show(), by = c('ownership','province','area')) %>% 
+      dplyr::rename(property_id = id, assessment_year = year) %>% 
+      dplyr::left_join(pptyval_show(), by = c("property_id","assessment_year")) %>% 
+      dplyr::mutate(annual_amount = round(assessment_value * tax_rate))
+  })
+})
+
+amort_show <- reactive({
+  
+  withProgress(message = 'Getting transaction details ...', {
+    amort_full <- ReadDataFromSS(db_obj, '* Frame 14 : Amortization *')
+    amort_show <- amort_full %>% 
+      dplyr::filter(show == 1) %>% 
+      dplyr::arrange(order) %>% 
+      dplyr::mutate(pmt_date = as.Date(pmt_date)) %>% 
+      dplyr::select(property_id, pmt_date, principal, interest, end_balance)
+  })
+})
+
+demogra_show <- reactive({
+  
+  withProgress(message = 'Getting transaction details ...', {
+    demogra_full <- ReadDataFromSS(db_obj, '* Input 05 : Demographics *')
+    demogra_show <- demogra_full %>% 
+      dplyr::filter(show == 1) %>% 
+      dplyr::arrange(order)
+  })
+})
+
+taxpar_show <- reactive({
+  
+  withProgress(message = 'Getting transaction details ...', {
+    taxpar_full <- ReadDataFromSS(db_obj, '* Input 06 : Tax Parameters *')
+    taxpar_show <- taxpar_full %>% 
+      dplyr::filter(show == 1) %>% 
+      dplyr::arrange(order)
+  })
+})
+
+taxtbl_show <- reactive({
+  
+  withProgress(message = 'Getting transaction details ...', {
+    taxtbl_full <- ReadDataFromSS(db_obj, '* Input 07 : Personal Income Tax Table *')
+    taxtbl_show <- taxtbl_full %>% 
+      dplyr::filter(show == 1) %>% 
+      dplyr::arrange(order)
+  })
+})
+
+intrt_show <- reactive({
+  
+  withProgress(message = 'Getting transaction details ...', {
+    intrt_full <- ReadDataFromSS(db_obj, '* Frame 20 : Interest Rates *')
+    intrt_show <- intrt_full %>% 
+      dplyr::filter(show == 1) %>% 
+      dplyr::arrange(order)
+  })
+})

@@ -15,8 +15,9 @@ source('http://faculty.ucr.edu/~tgirke/Documents/R_BioCond/My_R_Scripts/mortgage
 source("helper/dbhelper.R")
 source("helper/utility.R")
 source("global.R", local = FALSE)
-source("iUI/main.R")
 source("iServer/main.R")
+source("iUI/main.R")
+
 
 ##
 # Launch shiny app

@@ -1,26 +1,41 @@
 #
 # handling economic indicators
 #
-lapply(1:nrow(property_shownact), function(i){
-  
-  curr_ppty_id <- property_shownact$id[i]
-  curr_ppty_nm <- property_shownact$name[i]
-  
-  output[[paste0("pf_ipt_ppm_", property_shownact$id[i])]] <- renderUI({
+output$pf_ipt_ppm_ui <- renderUI({
+  do.call(tabsetPanel, c(id = "pf_ipt_ppm_tab", lapply(1:nrow(property_shownact()), function(i){
     
-    curr_pptytax <- pptytax_show %>% 
-      dplyr::filter(assessment_year == lubridate::year(input$pf_ipt_par_begdt) & property_id == curr_ppty_id) %>% 
-      dplyr::mutate(amount = round(annual_amount/12))
+    curr_ppty_id <- property_shownact()$id[i]
+    curr_ppty_nm <- property_shownact()$name[i]
     
-    curr_amort <- amort_show %>% 
-      dplyr::filter(pmt_date == input$pf_ipt_par_begdt & property_id == curr_ppty_id) %>% 
-      dplyr::mutate(
-        principal = round(principal),
-        interest = round(interest),
-        end_balance = round(end_balance)
-      )
+    tabPanel(
+      paste(property_shownact()$name[i], "(",property_shownact()$operation_type[i],")"),
+      uiOutput(paste0("pf_ipt_ppm_", property_shownact()$id[i]))
+    )
     
-    tagList(
+  })))
+})
+
+observe({
+  lapply(1:nrow(property_shownact()), function(i){
+    
+    curr_ppty_id <- property_shownact()$id[i]
+    curr_ppty_nm <- property_shownact()$name[i]
+    
+    output[[paste0("pf_ipt_ppm_", property_shownact()$id[i])]] <- renderUI({
+      
+      curr_pptytax <- pptytax_show() %>% 
+        dplyr::filter(assessment_year == lubridate::year(input$pf_ipt_par_begdt) & property_id == curr_ppty_id) %>% 
+        dplyr::mutate(amount = round(annual_amount/12))
+      
+      curr_amort <- amort_show() %>% 
+        dplyr::filter(pmt_date == input$pf_ipt_par_begdt & property_id == curr_ppty_id) %>% 
+        dplyr::mutate(
+          principal = round(principal),
+          interest = round(interest),
+          end_balance = round(end_balance)
+        )
+      
+      tagList(
         fluidRow(
           column(
             12,
@@ -68,11 +83,11 @@ lapply(1:nrow(property_shownact), function(i){
                           column(
                             12,
                             tags$h4(class = 'block_title', "Property Management"),
-                            tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_ppm_mgmtfee"), label = "management fee", value = property_shownact$exp_pm_fee_perc[i], width = entry_wid_l)),
-                            tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_ppm_lawncare"), label = "lawn care", value = property_shownact$exp_lawn_care[i], width = entry_wid_l)),
-                            tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_ppm_snowrem"), label = "snow removal", value = property_shownact$exp_snow_removal[i], width = entry_wid_l)),
-                            tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_ppm_cashadvfee"), label = "cash advance", value = property_shownact$exp_cash_adv_fee[i], width = entry_wid_l)),
-                            tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_ppm_cleaning"), label = "cleaning", value = property_shownact$exp_cleaning[i], width = entry_wid_l))
+                            tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_ppm_mgmtfee"), label = "management fee", value = property_shownact()$exp_pm_fee_perc[i], width = entry_wid_l)),
+                            tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_ppm_lawncare"), label = "lawn care", value = property_shownact()$exp_lawn_care[i], width = entry_wid_l)),
+                            tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_ppm_snowrem"), label = "snow removal", value = property_shownact()$exp_snow_removal[i], width = entry_wid_l)),
+                            tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_ppm_cashadvfee"), label = "cash advance", value = property_shownact()$exp_cash_adv_fee[i], width = entry_wid_l)),
+                            tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_ppm_cleaning"), label = "cleaning", value = property_shownact()$exp_cleaning[i], width = entry_wid_l))
                           )
                         )
                       ),
@@ -86,10 +101,10 @@ lapply(1:nrow(property_shownact), function(i){
                             tags$h4(class = 'block_title', "Expense"),
                             tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_exp_pptytax"), label = "property tax", value = curr_pptytax$amount, width = entry_wid_l)),
                             tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_exp_util"), label = "utility", value = 0, width = entry_wid_l)),
-                            tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_exp_insu"), label = "insurance", value = property_shownact$exp_insurance[i], width = entry_wid_l)),
+                            tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_exp_insu"), label = "insurance", value = property_shownact()$exp_insurance[i], width = entry_wid_l)),
                             tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_exp_watnsew"), label = "water & sewer", value = 0, width = entry_wid_l)),
                             tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_exp_main"), label = "maintenance", value = 0, width = entry_wid_l)),
-                            tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_exp_strata"), label = "strata", value = property_shownact$exp_strata[i], width = entry_wid_l))
+                            tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_exp_strata"), label = "strata", value = property_shownact()$exp_strata[i], width = entry_wid_l))
                           )
                         )
                       ),
@@ -124,82 +139,85 @@ lapply(1:nrow(property_shownact), function(i){
             )
           )
         )
-    )
+      )
       
+      
+    })
+    
+    # Update ppm fee
+    observeEvent(input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_inc_rent")]], {
+      
+      updateNumericInput(session, paste0("fp_ipt_ppm_",curr_ppty_id,"_ppm_mgmtfee"), value = input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_inc_rent")]] * property_shownact()$exp_pm_fee_perc[i] * (1+property_shownact()$gst[i]))
+      
+    })
+    
+    observeEvent(input[[paste0("fp_ipt_ppm_", curr_ppty_id, "_clear")]], {
+      showNotification("Transactions are being removed from  DB...", type = 'error')
+      
+      sql_str <- paste0("DELETE FROM `* Input 02 : Transactions *` WHERE property = '", curr_ppty_nm, 
+                        "' AND transaction_date >= '", input$pf_ipt_par_begdt, 
+                        "' AND transaction_date <= '", input$pf_ipt_par_enddt,"'")
+      GetQueryResFromSS(db_obj, sql_str)
+      
+    })
+    
+    observeEvent(input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_enter")]], {
+      
+      # Process ppm expense
+      showNotification("Transactions are being entered to DB...", type = 'message')
+      
+      dates <- input$pf_ipt_par_begdt
+      desc <- c('rental income','other income',
+                'mortgage principal','mortgage interest',
+                'management fee','lawn care','snow removal','cash advance fee','cleaning',
+                'property tax','utility','insurance','water & sewer','maintenance','strata',
+                'extra 1', 'extra 2', 'extra 3')
+      amnt <- c( input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_inc_rent")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_inc_other")]],
+                 input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_mort_prl")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_mort_int")]],
+                 input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_ppm_mgmtfee")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_ppm_lawncare")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_ppm_snowrem")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_ppm_cashadvfee")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_ppm_cleaning")]], 
+                 input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_exp_pptytax")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_exp_util")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_exp_insu")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_exp_watnsew")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_exp_main")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_exp_strata")]],
+                 input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_1")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_2")]],  input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_3")]])
+      ppty <- curr_ppty_nm
+      ctgr <- c('Rental Income','Other Rental Income',
+                'Mortgage Principal','Mortgage Interest',
+                'Property Management','Lawn Care','Snow Removal','Bill Advance Fee','Cleaning',
+                'Property Tax','Utilities','Home Insurance','Water & Sewer', 'Maintenance', 'Strata',
+                'PM Reserved 1','PM Reserved 2','PM Reserved 3')
+      hyctgr <- sapply(1:length(ctgr), function(x){ transcat_show()$hyper_category[transcat_show()$name == ctgr[x]] })
+      recu <- TRUE
+      cmts <- ''
+      
+      exp_df <- data.frame(
+        id = 0,
+        transaction_date = dates,
+        description = desc,
+        amount = amnt,
+        category = ctgr,
+        hyper_category = hyctgr,
+        property = ppty,
+        account = 'n/a',
+        best_alt_account = 'n/a',
+        operation_type = property_shownact()$operation_type[i],
+        costco = 0,
+        essential = 0,
+        refundable = 0,
+        receipt_kept = 0,
+        recurring = as.numeric(recu),
+        active = 1,
+        order = 999,
+        show = 1,
+        entry_datetime = Sys.time(),
+        comments = cmts,
+        stringsAsFactors = FALSE
+      )
+      
+      if(nrow(exp_df) > 0) WriteDataToSS(db_obj, exp_df, '* Input 02 : Transactions *', apd = TRUE)
+      
+    })
     
   })
-  
-  # Update ppm fee
-  observeEvent(input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_inc_rent")]], {
-    
-    updateNumericInput(session, paste0("fp_ipt_ppm_",curr_ppty_id,"_ppm_mgmtfee"), value = input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_inc_rent")]] * property_shownact$exp_pm_fee_perc[i] * (1+property_shownact$gst[i]))
-    
-  })
-  
-  observeEvent(input[[paste0("fp_ipt_ppm_", curr_ppty_id, "_clear")]], {
-    showNotification("Transactions are being removed from  DB...", type = 'error')
-    
-    sql_str <- paste0("DELETE FROM `* Input 02 : Transactions *` WHERE property = '", curr_ppty_nm, 
-                      "' AND transaction_date >= '", input$pf_ipt_par_begdt, 
-                      "' AND transaction_date <= '", input$pf_ipt_par_enddt,"'")
-    GetQueryResFromSS(db_obj, sql_str)
-    
-  })
-  
-  observeEvent(input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_enter")]], {
-    
-    # Process ppm expense
-    showNotification("Transactions are being entered to DB...", type = 'message')
-    
-    dates <- input$pf_ipt_par_begdt
-    desc <- c('rental income','other income',
-              'mortgage principal','mortgage interest',
-              'management fee','lawn care','snow removal','cash advance fee','cleaning',
-              'property tax','utility','insurance','water & sewer','maintenance','strata',
-              'extra 1', 'extra 2', 'extra 3')
-    amnt <- c( input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_inc_rent")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_inc_other")]],
-               input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_mort_prl")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_mort_int")]],
-              input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_ppm_mgmtfee")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_ppm_lawncare")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_ppm_snowrem")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_ppm_cashadvfee")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_ppm_cleaning")]], 
-              input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_exp_pptytax")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_exp_util")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_exp_insu")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_exp_watnsew")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_exp_main")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_exp_strata")]],
-              input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_1")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_2")]],  input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_3")]])
-    ppty <- curr_ppty_nm
-    ctgr <- c('Rental Income','Other Rental Income',
-              'Mortgage Principal','Mortgage Interest',
-              'Property Management','Lawn Care','Snow Removal','Bill Advance Fee','Cleaning',
-              'Property Tax','Utilities','Home Insurance','Water & Sewer', 'Maintenance', 'Strata',
-              'PM Reserved 1','PM Reserved 2','PM Reserved 3')
-    hyctgr <- sapply(1:length(ctgr), function(x){ transcat_show$hyper_category[transcat_show$name == ctgr[x]] })
-    recu <- TRUE
-    cmts <- ''
-    
-    exp_df <- data.frame(
-      id = 0,
-      transaction_date = dates,
-      description = desc,
-      amount = amnt,
-      category = ctgr,
-      hyper_category = hyctgr,
-      property = ppty,
-      account = 'n/a',
-      best_alt_account = 'n/a',
-      operation_type = property_shownact$operation_type[i],
-      costco = 0,
-      essential = 0,
-      refundable = 0,
-      receipt_kept = 0,
-      recurring = as.numeric(recu),
-      active = 1,
-      order = 999,
-      show = 1,
-      entry_datetime = Sys.time(),
-      comments = cmts,
-      stringsAsFactors = FALSE
-    )
-    
-    if(nrow(exp_df) > 0) WriteDataToSS(db_obj, exp_df, '* Input 02 : Transactions *', apd = TRUE)
-    
-  })
-  
 })
+
+
 
 

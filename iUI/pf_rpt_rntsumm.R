@@ -7,14 +7,7 @@ pf_rpt_rntsumm_tp <- tabPanel(
     column(
       12,
       
-      do.call(tabsetPanel, c(id = "pf_rpt_rntsumm_tab", lapply(1:nrow(property_show), function(i){
-
-        tabPanel(
-          paste(property_show$name[i], "(",property_show$operation_type[i],")"),
-          uiOutput(paste0("pf_rpt_rntsumm_", property_show$id[i]))
-        )
-
-      })))
+      uiOutput('pf_rpt_rntsumm_ui')
     )
   )
 )
