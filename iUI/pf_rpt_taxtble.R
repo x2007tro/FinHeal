@@ -31,7 +31,7 @@ pf_rpt_taxtble_tp <- tabPanel(
               )
             )
           })
-        ),
+        )
       )
       
     )
