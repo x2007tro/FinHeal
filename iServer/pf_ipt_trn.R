@@ -81,8 +81,6 @@ lapply(1:nrow(accounts_show), function(i){
                         column(
                           width = 12,
                           
-                          tags$div(
-                            
                             tagList(
                               tags$div(class = "task_div", dateInput(paste0("fp_ipt_trn_",curr_acct_id,"_date",k), label = "date", value = date_k, width = entry_wid_s)),
                               tags$div(class = "task_div", textInput(paste0("fp_ipt_trn_",curr_acct_id,"_desc",k), label = "description", value = desc_k, width = entry_wid_l)),
@@ -96,7 +94,7 @@ lapply(1:nrow(accounts_show), function(i){
                               # add more tag here
                             )
                             
-                          )
+
                         )
                       )
                       
