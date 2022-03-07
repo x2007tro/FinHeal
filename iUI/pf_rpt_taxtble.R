@@ -1,7 +1,7 @@
 ##
 # tab
 pf_rpt_taxtble_tp <- tabPanel(
-  "Tax Tables",
+  "Tax",
   
   fluidRow(
     column(
@@ -14,7 +14,7 @@ pf_rpt_taxtble_tp <- tabPanel(
               12/nrow(demogra_show),
               tags$div(
                 class = 'block_inner_frame',
-                tags$h3(paste0(demogra_show$name[i])),
+                tags$h4(class = 'block_title', paste0(demogra_show$name[i])),
                 uiOutput(paste0("pf_rpt_taxtble_demo_", demogra_show$id[i]))
               )
             )
@@ -26,7 +26,7 @@ pf_rpt_taxtble_tp <- tabPanel(
               12/nrow(property_shownact),
               tags$div(
                 class = 'block_inner_frame',
-                tags$h3(paste0(property_shownact$name[i])),
+                tags$h4(class = 'block_title', paste0(property_shownact$name[i])),
                 DT::dataTableOutput(paste0("pf_rpt_taxtble_ppty_", property_shownact$id[i]))
               )
             )

@@ -2,8 +2,8 @@
 # utilify functions
 DashbdPlotDataFormat <- function(dataset, period){
   income <- round(sum(dataset$amount[dataset$hyper_category == 'Income']),0)
-  principal <- round(sum(dataset$amount[dataset$hyper_category == 'Investments']),0)
-  expense <- round(sum(dataset$amount[dataset$hyper_category != 'Income' & dataset$hyper_category != 'Investments']),0)
+  principal <- round(sum(dataset$amount[dataset$category == 'Mortgage Principal']),0)
+  expense <- round(sum(dataset$amount[dataset$hyper_category != 'Income' & dataset$category != 'Mortgage Principal']),0)
   
   df <- data.frame(
     period = period,
@@ -16,34 +16,59 @@ DashbdPlotDataFormat <- function(dataset, period){
   return(df)
 }
 
-SummaryPlot <- function(plot_data, text_degr = 0){
+SummaryPlot <- function(plot_data, text_degr = 0, legend_pos = 'right'){
   plot_me <- ggplot(plot_data, aes(x = type, y = value, fill = category)) + 
     geom_bar(stat="identity") + 
     facet_grid(.~period) +
     geom_text(
-      label = plot_data$value,
-      #nudge_x = 0.25, nudge_y = 0.25, 
+      aes(label = scales::comma(plot_data$value, accuracy = 1), fontface = 'bold'),
+      colour = plot_font_color,
+      position = position_stack(vjust = 0.5),
+      #nudge_x = 0, nudge_y = -0.5,
+      #vjust = 0.5, 
+      #hjust = 0,
       check_overlap = T
     ) +
+    scale_fill_manual(values = get_palette(length(unique(plot_data$category)))) + 
+    labs() +
     theme(
-      axis.text.x = element_text(angle = text_degr, size = 13),
+      strip.text.x = element_text(size = 13),
+      axis.text.x = element_text(angle = text_degr, size = 13, color = plot_font_color),
       axis.title.x = element_blank(),
-      axis.title.y = element_blank())
+      axis.title.y = element_blank(),
+      rect = element_rect(fill = '#f2f2f2'),
+      panel.background = element_rect(fill = '#f2f2f2'),
+      plot.background = element_rect(fill = '#f2f2f2', color = '#f2f2f2'),
+      legend.position = legend_pos,
+      legend.text = element_text(color = plot_font_color),
+      legend.title = element_text(color = plot_font_color))
   return(plot_me)
 }
 
-ExpCatPlot <- function(plot_data, plot_type){
+ExpCatPlot <- function(plot_data, plot_type, lenged_pos = 'right'){
   if(plot_type == 'pie'){
     plot_me <- pie(plot_data$value, labels = paste0(plot_data$category, " (", plot_data$value, ")"),
-        border = "white", col = RColorBrewer::brewer.pal(8, "Set2"))  
+        border = "white", col = RColorBrewer::brewer.pal(9, "Set3"))  
   } else if(plot_type == 'treemap'){
     plot_me <- ggplot(plot_data, 
                       aes(fill = category, 
                           area = value,
-                          label = paste0(category, " (", value, ")"))) +
+                          label = paste0(category, " (",  scales::comma(value, accuracy = 1), ")")),
+                          fontface = 'bold') +
       geom_treemap() + 
-      geom_treemap_text(colour = "white", 
-                        place = "centre")
+      geom_treemap_text(colour = plot_font_color, 
+                        place = "centre") +
+      scale_fill_manual(values =  get_palette(length(unique(plot_data$category)))) + 
+      theme(
+        axis.text.x = element_text(angle = 0, size = 13),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        rect = element_rect(fill = '#f2f2f2'),
+        panel.background = element_rect(fill = '#f2f2f2'),
+        plot.background = element_rect(fill = '#f2f2f2', color = '#f2f2f2'),
+        legend.position = lenged_pos,
+        legend.text = element_text(color = plot_font_color),
+        legend.title = element_text(color = plot_font_color))
   } else {
     plot_me <- NULL
   }
@@ -124,11 +149,11 @@ AmortTableConstr <- function(
       mortgage(hp*0.8, ir, 25, T, F)
       
       df <- data.frame(
-        `HousePrice` = hp,
-        `DownPaymentRequired` = hp*0.2,
-        `LoanAmount` = hp*0.8,
-        `InterestRate` = ir,
-        `MlyMortgage` = round(monthPay,0),
+        `house_price` = hp,
+        `down_payment_required` = hp*0.2,
+        `loan_amount` = hp*0.8,
+        `interest_rate` = ir,
+        `monthly_payment` = round(monthPay,0),
         stringsAsFactors = FALSE
       )
       df2 <- NULL

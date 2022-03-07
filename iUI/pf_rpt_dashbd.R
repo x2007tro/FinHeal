@@ -7,52 +7,54 @@ pf_rpt_dashbd_tp <- tabPanel(
     column(
       12,
       
-      fluidRow(
-        column(
-          6,
-          tags$div(
-            class = 'block_outter_frame',
-            tags$h3("Current Month"),
-            plotOutput("pf_rpt_dashbd_p1")
-          )
-        ),
+      tags$div(
+        class = 'block_outter_frame',
         
-        column(
-          6,
-          tags$div(
-            class = 'block_outter_frame',
-            tags$h3("Current Year"),
-            plotOutput("pf_rpt_dashbd_p2")
-          )
+        fluidRow(
+          column(
+            6,
+            tags$div(
+              class = 'block_inner_frame',
+              tags$h4(class = 'block_title', "Report Month"),
+              plotOutput("pf_rpt_dashbd_p1")
+            )
+          ),
           
-        )
-      ),
-      fluidRow(
-        column(
-          5,
-          tags$div(
-            class = 'block_outter_frame',
-            tags$h3("Current Month"),
-            DT::dataTableOutput("pf_rpt_dashbd_t1")
+          column(
+            6,
+            tags$div(
+              class = 'block_inner_frame',
+              tags$h4(class = 'block_title', "Report Year"),
+              plotOutput("pf_rpt_dashbd_p2")
+            )
+            
           )
         ),
-        column(
-          1,
-          tags$div(
-            class = 'seperater'
-          )
-        ),
-        
-        column(
-          6,
-          tags$div(
-            class = 'block_outter_frame',
-            tags$h3("Previous Year"),
-            plotOutput("pf_rpt_dashbd_p3")
-          )
+        fluidRow(
+          column(
+            6,
+            tags$div(
+              class = 'block_inner_frame',
+              tags$h4(class = 'block_title', "Report Month"),
+              tags$div(
+                class = 'dt_table',
+                DT::dataTableOutput("pf_rpt_dashbd_t1")
+              ) 
+            )
+          ),
           
+          column(
+            6,
+            tags$div(
+              class = 'block_inner_frame',
+              tags$h4(class = 'block_title', "Previous Year"),
+              plotOutput("pf_rpt_dashbd_p3")
+            )
+            
+          )
         )
-      ),
+      )
+      
       
     )
   )

@@ -1,14 +1,17 @@
 ##
 # Global parameter
 ##
-theme_set(theme_bw())
+theme_set(theme_light())
 options(scipen = 66666)
 
+entry_wid_ty <- "50px"
 entry_wid_s <- "105px"
 entry_wid_m <- "180px"
 entry_wid_l <- "275px"
 entry_wid_xl <- "500px"
-brewed_colors <- rep(RColorBrewer::brewer.pal(n = 9, name = "Set3"), 100)
+plot_font_color <- "#808080"
+brewed_colors <- rep(RColorBrewer::brewer.pal(n = 8, name = "Pastel1"), 100)
+get_palette <- colorRampPalette(RColorBrewer::brewer.pal(8, name = 'Pastel1'))
 
 #
 # connection for database
@@ -22,7 +25,10 @@ db_obj <- list(
 )
 
 transdata_full <- ReadDataFromSS(db_obj, '* Input 02 : Transactions *')
-transdata_full <<- transdata_full %>% dplyr::filter(active == 1)
+transdata_full <<- transdata_full %>% 
+  dplyr::filter(active == 1) %>% 
+  dplyr::filter(operation_type == 'p') %>% 
+  dplyr::select(-dplyr::one_of('id','active','order','show','entry_datetime') )
 
 tasks <- list(100)
 
@@ -31,6 +37,12 @@ accounts_show <- accounts_full %>%
   dplyr::filter(show == 1) %>% 
   dplyr::arrange(order) %>% 
   dplyr::select(id, name)
+
+opertype_full <- ReadDataFromSS(db_obj, '* Frame 03 : Operation Type *')
+opertype_show <- opertype_full %>% 
+  dplyr::filter(show == 1) %>% 
+  dplyr::arrange(order) %>% 
+  dplyr::select(id, operation_type)
 
 transcat_full <- ReadDataFromSS(db_obj, '* Frame 04 : Transaction Category *')
 transcat_show <- transcat_full %>% 
@@ -49,7 +61,7 @@ autocat_show <- autocat_full %>%
   dplyr::filter(show == 1) %>% 
   dplyr::arrange(order) %>% 
   dplyr::mutate(recurring = as.logical(recurring)) %>% 
-  dplyr::select(string, category, recurring, property, multiplier ,data_table)
+  dplyr::select(string, category, recurring, property, multiplier, operation_type, data_table)
 
 property_full <- ReadDataFromSS(db_obj, '* Frame 11 : Property *')
 property_show <- property_full %>% 

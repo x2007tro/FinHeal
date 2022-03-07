@@ -7,7 +7,7 @@ pf_fle_dl_tp <- tabPanel(
     column(
       12,
       
-      tags$h3('Under development!')
+      tags$h4(class = 'block_title', 'Under development!')
     )
   )
 )

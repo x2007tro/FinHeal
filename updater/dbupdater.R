@@ -13,8 +13,8 @@ WriteDataToSS(db_obj, frame_account_tbl, '* Frame 01 : Account *')
 frame_account_tbl <- readxl::read_excel('./updater/source.xlsx', sheet = 'frame02 card type')
 WriteDataToSS(db_obj, frame_account_tbl, '* Frame 02 : Card Type *')
 
-frame_account_tbl <- readxl::read_excel('./updater/source.xlsx', sheet = 'frame03 account type')
-WriteDataToSS(db_obj, frame_account_tbl, '* Frame 03 : Account Type *')
+frame_account_tbl <- readxl::read_excel('./updater/source.xlsx', sheet = 'frame03 operation type')
+WriteDataToSS(db_obj, frame_account_tbl, '* Frame 03 : Operation Type *')
 
 frame_account_tbl <- readxl::read_excel('./updater/source.xlsx', sheet = 'frame04 transaction category')
 WriteDataToSS(db_obj, frame_account_tbl, '* Frame 04 : Transaction Category *')

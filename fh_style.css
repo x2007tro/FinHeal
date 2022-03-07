@@ -5,6 +5,7 @@ body {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 12px;
 	border: 0;
+	color:#999999;
 }
 
 /*
@@ -20,17 +21,19 @@ body {
 
 .block_inner_frame {
   border:0;
-  margin:0 0 0 3px;    /* set left margin to 3px */
-  padding:3px;
+  margin:2px 0 0px 0px;    /* set left margin to 3px */
+  padding:0px 1px 0px 0px;
+  background-color:#f2f2f2;
 }
 
 /*
  * App specific settings
  */
 .block_title {
-  padding:3px 0;
-  color:rgba(255,250,250,1);     /* snow */
+  padding:1px 3px;
+  color:white;     /* snow rgba(255,250,250,1) */
   font-weight:bold;
+  background-color:#999999;
 }
 .macro_block {
   border: 0;
@@ -101,3 +104,14 @@ body {
 .task_cat_div {
   font-weight:bold;
 }
+
+.dt_table {
+  color:#808080;
+}
+
+/*
+.shiny-notification {
+  position:fixed;
+  top: calc(50%);
+  left: calc(50%);
+}*/

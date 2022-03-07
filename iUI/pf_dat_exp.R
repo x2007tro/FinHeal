@@ -10,7 +10,14 @@ pf_dat_exp_tp <- tabPanel(
       fluidRow(
         column(
           12,
-          DT::dataTableOutput("pf_dat_exp_cm_trans")
+          tags$div(
+            class = 'block_outter_frame',
+            tags$div(
+              class = 'block_inner_frame',
+              DT::dataTableOutput("pf_dat_exp_cm_trans")
+            )
+          )
+          
         )
       )
       
@@ -21,7 +28,14 @@ pf_dat_exp_tp <- tabPanel(
       fluidRow(
         column(
           12,
-          DT::dataTableOutput("pf_dat_exp_ytd_trans")
+          tags$div(
+            class = 'block_outter_frame',
+            tags$div(
+              class = 'block_inner_frame',
+              DT::dataTableOutput("pf_dat_exp_ytd_trans")
+            )
+          )
+          
         )
       )
     ),
@@ -31,7 +45,14 @@ pf_dat_exp_tp <- tabPanel(
       fluidRow(
         column(
           12,
-          DT::dataTableOutput("pf_dat_exp_max_trans")
+          tags$div(
+            class = 'block_outter_frame',
+            tags$div(
+              class = 'block_inner_frame',
+              DT::dataTableOutput("pf_dat_exp_max_trans")
+            )
+          )
+          
         )
       )
     )

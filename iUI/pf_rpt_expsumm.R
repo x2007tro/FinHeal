@@ -14,7 +14,7 @@ pf_rpt_expsumm_tp <- tabPanel(
             6,
             tags$div(
               class = 'block_inner_frame',
-              tags$h3("Current Month"),
+              tags$h4(class = 'block_title', "Report Month"),
               plotOutput("pf_rpt_expsumm_p1")
             )
           ),
@@ -22,7 +22,7 @@ pf_rpt_expsumm_tp <- tabPanel(
             6,
             tags$div(
               class = 'block_inner_frame',
-              tags$h3("Current Year"),
+              tags$h4(class = 'block_title', "Report Year"),
               plotOutput("pf_rpt_expsumm_p2")
             )
           )
@@ -32,7 +32,7 @@ pf_rpt_expsumm_tp <- tabPanel(
             6,
             tags$div(
               class = 'block_inner_frame',
-              tags$h3("Past Six Month"),
+              tags$h4(class = 'block_title', "Past Five Months"),
               plotOutput("pf_rpt_expsumm_p3")
             )
           ),
@@ -40,7 +40,7 @@ pf_rpt_expsumm_tp <- tabPanel(
             6,
             tags$div(
               class = 'block_inner_frame',
-              tags$h3("Past Six Years"),
+              tags$h4(class = 'block_title', "Past Five Years"),
               plotOutput("pf_rpt_expsumm_p4")
             )
           )
