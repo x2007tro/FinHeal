@@ -8,8 +8,24 @@ transdata_full <- reactive({
     transdata_full <- transdata_full %>% 
       dplyr::filter(active == 1) %>% 
       dplyr::filter(operation_type == 'p') %>% 
-      dplyr::select(-dplyr::one_of('id','active','order','show','entry_datetime') )
+      dplyr::select(-dplyr::one_of('id','active','order','show','entry_datetime')) %>% 
+      dplyr::arrange(transaction_date, hyper_category)
   })
+})
+
+transdata_cm <- reactive({
+  df <- transdata_full() %>% 
+    dplyr::filter(transaction_date >= input$pf_ipt_par_begdt) %>% 
+    dplyr::filter(transaction_date <= input$pf_ipt_par_enddt) %>% 
+    dplyr::arrange(transaction_date, hyper_category)
+  df
+})
+
+transdata_ytd <- reactive({
+  df <- transdata_full() %>% 
+    dplyr::filter(lubridate::year(transaction_date) == lubridate::year(input$pf_ipt_par_begdt)) %>% 
+    dplyr::arrange(transaction_date, hyper_category)
+  df
 })
 
 accounts_show <- reactive({
