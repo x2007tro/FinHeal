@@ -6,6 +6,11 @@ mainServer <- function(input, output, session) {
   ##
   # Load input files
   ##
+  source("./iServer/pf_rpt_pernw.R", local = TRUE)
+  
+  ##
+  # Load input files
+  ##
   source("./iServer/pf_ipt_par.R", local = TRUE)
   
   ##

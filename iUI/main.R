@@ -1,7 +1,7 @@
 ##
 # Source all ui files
 ##
-ui_files <- c('pf_rpt_dashbd','pf_rpt_expsumm','pf_rpt_rntsumm','pf_rpt_taxtble',
+ui_files <- c('pf_rpt_pernw','pf_rpt_dashbd','pf_rpt_expsumm','pf_rpt_rntsumm','pf_rpt_taxtble',
               'pf_ipt_par','pf_ipt_trn','pf_ipt_ppm',
               'pf_fle_ul','pf_fle_dl',
               'pf_dat_exp',
@@ -28,6 +28,7 @@ mainUI <- fluidPage(theme = shinythemes::shinytheme("journal"),
       navlistPanel(
         "Report",
         widths = c(2,10),
+        pr_rpt_pernw_tp,
         pf_rpt_dashbd_tp,
         pf_rpt_expsumm_tp,
         pf_rpt_rntsumm_tp,

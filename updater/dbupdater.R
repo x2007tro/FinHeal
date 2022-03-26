@@ -34,6 +34,9 @@ WriteDataToSS(db_obj, frame_account_tbl, '* Frame 13 : Property Tax Rates *')
 frame_account_tbl <- readxl::read_excel('./updater/source.xlsx', sheet = 'frame14 amortization')
 WriteDataToSS(db_obj, frame_account_tbl, '* Frame 14 : Amortization *')
 
+frame_account_tbl <- readxl::read_excel('./updater/source.xlsx', sheet = 'frame15 land')
+WriteDataToSS(db_obj, frame_account_tbl, '* Frame 15 : Land *')
+
 frame_account_tbl <- readxl::read_excel('./updater/source.xlsx', sheet = 'frame20 interest rates')
 WriteDataToSS(db_obj, frame_account_tbl, '* Frame 20 : Interest Rates *')
 
@@ -48,6 +51,9 @@ WriteDataToSS(db_obj, frame_account_tbl, '* Input 06 : Tax Parameters *')
 
 frame_account_tbl <- readxl::read_excel('./updater/source.xlsx', sheet = 'input07 income tax brackets')
 WriteDataToSS(db_obj, frame_account_tbl, '* Input 07 : Personal Income Tax Table *')
+
+frame_account_tbl <- readxl::read_excel('./updater/source.xlsx', sheet = 'input08 net worth')
+WriteDataToSS(db_obj, frame_account_tbl, '* Input 08 : Net Worth *')
 
 frame_account_tbl <- readxl::read_excel('./updater/source.xlsx', sheet = 'input10 autocat')
 WriteDataToSS(db_obj, frame_account_tbl, '* Input 10 : Autocat *')
