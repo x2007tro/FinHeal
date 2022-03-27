@@ -21,7 +21,7 @@ output$pf_rpf_taxtble_ui <- renderUI({
           12/nrow(property_shownact()),
           tags$div(
             class = 'block_inner_frame',
-            tags$h4(class = 'block_title', paste0(property_shownact()$name[i], "(",property_shownact()$operation_type[i],")")),
+            tags$h4(class = 'block_title', paste0(property_shownact()$name[i], " ( ",property_shownact()$operation_type[i]," )")),
             DT::dataTableOutput(paste0("pf_rpt_taxtble_ppty_", property_shownact()$id[i]))
           )
         )
