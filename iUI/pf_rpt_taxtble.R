@@ -1,7 +1,7 @@
 ##
 # tab
 pf_rpt_taxtble_tp <- tabPanel(
-  "Tax",
+  "Income & Tax",
   
   fluidRow(
     column(

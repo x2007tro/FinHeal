@@ -4,16 +4,24 @@ output$pf_rpf_taxtble_ui <- renderUI({
   tags$div(
     class = 'block_outter_frame',
     fluidRow(
-      lapply(1:nrow(demogra_show()), function(i){
-        column(
-          12/nrow(demogra_show()),
-          tags$div(
-            class = 'block_inner_frame',
-            tags$h4(class = 'block_title', paste0(demogra_show()$name[i], " [", demogra_show()$residence[i],"]")),
-            uiOutput(paste0("pf_rpt_taxtble_demo_", demogra_show()$id[i]))
+      column(
+        12,
+        tags$div(
+          class = 'block_inner_frame',
+          fluidRow(
+            lapply(1:nrow(demogra_show()), function(i){
+              column(
+                12/nrow(demogra_show()),
+                tags$div(
+                  #class = 'block_inner_frame',
+                  tags$h4(class = 'block_title', paste0(demogra_show()$name[i], " [", demogra_show()$residence[i],"]")),
+                  uiOutput(paste0("pf_rpt_taxtble_demo_", demogra_show()$id[i]))
+                )
+              )
+            })
           )
         )
-      })
+      )
     ),
     fluidRow(
       lapply(1:nrow(property_shownact()), function(i){
