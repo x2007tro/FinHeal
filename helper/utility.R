@@ -6,7 +6,7 @@ DashbdPlotDataFormat <- function(dataset, period){
   expense <- round(sum(dataset$amount[dataset$hyper_category != 'Income' & dataset$category != 'Mortgage Principal']),0)
   
   df <- data.frame(
-    period = period,
+    period = paste0(period, " ($", scales::comma(income - expense - principal, accuracy = 1), ")"),
     type = c("Inflow","Outflow","Outflow"),
     category = c("Income","Expense","Mortgage Principal"),
     value = c(income, expense, principal),
