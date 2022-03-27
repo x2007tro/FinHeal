@@ -5,7 +5,7 @@ output$pf_rpt_rntsumm_ui <- renderUI({
   do.call(tabsetPanel, c(id = "pf_rpt_rntsumm_tab", lapply(1:nrow(property_show()), function(i){
     
     tabPanel(
-      paste(property_show()$name[i], "(",property_show()$operation_type[i],")"),
+      paste(property_show()$name[i], "(",property_show()$operation_type[i],")","(",ifelse(property_show()$active[i]==1,'a','i'),")"),
       uiOutput(paste0("pf_rpt_rntsumm_", property_show()$id[i]))
     )
     
@@ -44,12 +44,31 @@ observe({
             end_balance = round(end_balance)
           )
         
+        net_income <- sum(summ_data[summ_data$category == 'Income','value']) - sum(summ_data[summ_data$category == 'Expense','value'])
+        cap_gain <- ifelse(property_show()$sale_price[i] != 0, property_show()$sale_price[i] - property_show()$purchase_price[i], 0)
+        profit <- net_income + cap_gain
+        
         tagList(
           fluidRow(
             column(
               12,
               tags$div(
                 class = 'block_outter_frame',
+                
+                tags$div(
+                  class = 'block_inner_frame',
+                  fluidRow(
+                    column(
+                      12,
+                      tags$h4(class = 'block_title', 'Summary'),
+                      tags$div(class = 'block_summary', tags$h5(
+                        paste0('PROFIT ($', scales::comma(profit, accuracy = 1),
+                               ') consists of NET INCOME ($', scales::comma(net_income, accuracy = 1),
+                               ') and CAPITAL GAIN ($', scales::comma(cap_gain, accuracy = 1), ")")
+                      )),
+                    )
+                  )
+                ),
                 
                 tags$div(
                   class = 'block_inner_frame',
