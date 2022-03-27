@@ -7,7 +7,7 @@ transdata_full <- reactive({
     transdata_full <- ReadDataFromSS(db_obj, '* Input 02 : Transactions *')
     transdata_full <- transdata_full %>% 
       dplyr::filter(active == 1) %>% 
-      dplyr::filter(operation_type == 'p') %>% 
+      #dplyr::filter(operation_type == 'p') %>% 
       dplyr::select(-dplyr::one_of('id','active','order','show','entry_datetime')) %>% 
       dplyr::arrange(transaction_date, hyper_category)
   })
@@ -184,6 +184,26 @@ intrt_show <- reactive({
   withProgress(message = 'Getting transaction details ...', {
     intrt_full <- ReadDataFromSS(db_obj, '* Frame 20 : Interest Rates *')
     intrt_show <- intrt_full %>% 
+      dplyr::filter(show == 1) %>% 
+      dplyr::arrange(order)
+  })
+})
+
+land_show <- reactive({
+  
+  withProgress(message = 'Getting transaction details ...', {
+    land_full <- ReadDataFromSS(db_obj, '* Frame 15 : Land *')
+    land_show <- land_full %>% 
+      dplyr::filter(show == 1) %>% 
+      dplyr::arrange(order)
+  })
+})
+
+pernw_show <- reactive({
+  
+  withProgress(message = 'Getting transaction details ...', {
+    pernw_full <- ReadDataFromSS(db_obj, '* Input 08 : Net Worth *')
+    pernw_show <- pernw_full %>% 
       dplyr::filter(show == 1) %>% 
       dplyr::arrange(order)
   })

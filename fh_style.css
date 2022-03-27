@@ -109,9 +109,20 @@ body {
   color:#808080;
 }
 
-/*
-.shiny-notification {
-  position:fixed;
-  top: calc(50%);
-  left: calc(50%);
-}*/
+.pr_rpt_pernw_div{
+  margin-left:1px;
+  padding-left:1px;
+}
+
+/* Style for Net Worth Page */
+.pr_rpt_pernw_div label{ 
+  display: table-cell; 
+  text-align: center;
+  vertical-align: middle; 
+  
+}
+
+.pr_rpt_pernw_div .form-group { 
+  display: table-row;
+}
+

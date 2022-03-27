@@ -109,11 +109,12 @@ observe({
   lapply(1:nrow(property_shownact()), function(i){
     curr_ppty_id <- property_shownact()$id[i]
     curr_ppty_nm <- property_shownact()$name[i]
+    curr_ppty_ot <- property_shownact()$operation_type[i]
     
     output[[paste0("pf_rpt_taxtble_ppty_", curr_ppty_id)]] <- DT::renderDataTable({
       withProgress(message = 'Retrieving transaction details ...', {
         ppty_data <- transdata_full() %>% 
-          dplyr::filter(property == curr_ppty_nm) %>% 
+          dplyr::filter(property == curr_ppty_nm & operation_type == curr_ppty_ot) %>% 
           dplyr::filter(lubridate::year(transaction_date) == as.numeric(input$fp_rpt_taxtble_ty)) %>% 
           dplyr::group_by(category) %>% 
           dplyr::summarise(value = sum(amount)) %>% 

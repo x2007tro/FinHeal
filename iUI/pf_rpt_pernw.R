@@ -4,6 +4,7 @@ pr_rpt_pernw_tp <- tabPanel(
   "Net Worth",
   
   fluidRow(
+    
     column(
       12,
       tags$div(
@@ -11,12 +12,52 @@ pr_rpt_pernw_tp <- tabPanel(
         
         fluidRow(
           column(
-            6,
-            tags$h4('Asset'),
+            4,
+            
+            fluidRow(
+              column(
+                12,
+                
+                tags$div(
+                  class = 'block_inner_frame',
+                  tags$h4(class = 'block_title', 'Net Worth'),
+                  fluidRow(
+                    column(
+                      12,
+                      uiOutput('pr_rpt_pernw_netw')
+                    )
+                  ) 
+                  
+                )
+                
+              )
+            ),
+            
+            fluidRow(
+              column(
+                12,
+                
+                tags$div(
+                  class = 'block_inner_frame',
+                  tags$h4(class = 'block_title', 'Liability'),
+                  fluidRow(
+                    column(
+                      12,
+                      uiOutput('pr_rpt_pernw_liab')
+                    )
+                  ) 
+                )
+              )
+            )
+            
+          ),
+          
+          column(
+            8,
             
             tags$div(
               class = 'block_inner_frame',
-              
+              tags$h4(class = 'block_title', 'Asset'),
               fluidRow(
                 column(
                   6,
@@ -50,40 +91,7 @@ pr_rpt_pernw_tp <- tabPanel(
               )
               
             )
-          ),
-          
-          column(
-            3,
-            tags$h4('Liability'),
-            
-            tags$div(
-              class = 'block_inner_frame',
-              fluidRow(
-                column(
-                  12,
-                  uiOutput('pr_rpt_pernw_liab')
-                )
-              ) 
-            )
-            
-          ),
-          
-          column(
-            3,
-            tags$h4('Equity'),
-            
-            tags$div(
-              class = 'block_inner_frame',
-              fluidRow(
-                column(
-                  12,
-                  uiOutput('pr_rpt_pernw_netw')
-                )
-              ) 
-              
-            )
           )
-        
         )
         
       )

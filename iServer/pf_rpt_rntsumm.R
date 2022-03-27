@@ -17,10 +17,11 @@ observe({
     
     curr_ppty_id <- property_show()$id[i]
     curr_ppty_nm <- property_show()$name[i]
+    curr_ppty_ot <- property_show()$operation_type[i]
     
     withProgress(message = 'Retrieving transaction details ...', {
       summ_data <- transdata_full() %>% 
-        dplyr::filter(property == curr_ppty_nm) %>% 
+        dplyr::filter(property == curr_ppty_nm & operation_type == curr_ppty_ot) %>% 
         dplyr::mutate(period = lubridate::year(transaction_date)) %>% 
         dplyr::mutate(category = ifelse(hyper_category == "Income","Income",ifelse(category == 'Mortgage Principal',"Mortgage Principal","Expense"))) %>% 
         dplyr::mutate(type = ifelse(category == "Income", "Inflow", "Outflow")) %>% 
