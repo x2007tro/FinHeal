@@ -95,7 +95,7 @@ output$pr_rpt_pernw_ast_prop <- renderUI({
           interest = round(interest),
           end_balance = round(end_balance)
         )
-      curr_mb <- curr_amort$end_balance
+      curr_mb <- -curr_amort$end_balance
   
       fluidRow(
         column(
