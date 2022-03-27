@@ -65,7 +65,7 @@ observe({
                         paste0('PROFIT ($', scales::comma(profit, accuracy = 1),
                                ') consists of NET INCOME ($', scales::comma(net_income, accuracy = 1),
                                ') and CAPITAL GAIN ($', scales::comma(cap_gain, accuracy = 1), ")")
-                      )),
+                      ))
                     )
                   )
                 ),
