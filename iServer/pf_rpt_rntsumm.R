@@ -45,7 +45,7 @@ observe({
           )
         
         net_income <- sum(summ_data[summ_data$category == 'Income','value']) - sum(summ_data[summ_data$category == 'Expense','value'])
-        cap_gain <- ifelse(property_show()$sale_price[i] != 0, property_show()$sale_price[i] - property_show()$purchase_price[i], 0)
+        cap_gain <- ifelse(property_show()$sale_price[i] != 0, property_show()$sale_price[i] - property_show()$purchase_price[i], property_show()$appraisal_value[i] - property_show()$purchase_price[i])
         profit <- net_income + cap_gain
         
         tagList(
