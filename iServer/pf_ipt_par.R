@@ -208,3 +208,14 @@ pernw_show <- reactive({
       dplyr::arrange(order)
   })
 })
+
+autoInvalidate <- reactiveTimer(1000*60*15)
+
+observe({
+  
+  autoInvalidate()
+  
+  updateDateInput(session, 'pf_ipt_par_begdt', value = lubridate::floor_date(Sys.Date(),"month") - months(1))
+  updateDateInput(session, 'pf_ipt_par_enddt', value = lubridate::ceiling_date(Sys.Date(),"month") - months(1) - days(1))
+  
+})
