@@ -199,6 +199,26 @@ land_show <- reactive({
   })
 })
 
+lafftt_input_show <- reactive({
+  
+  withProgress(message = 'Getting transaction details ...', {
+    lafftt_input_full <- ReadDataFromSS(db_obj, '* Frame 16 : Loan afforability test input *')
+    lafftt_input_show <- lafftt_input_full %>% 
+      dplyr::filter(show == 1) %>% 
+      dplyr::arrange(order)
+  })
+})
+
+lafftt_output_show <- reactive({
+  
+  withProgress(message = 'Getting transaction details ...', {
+    lafftt_output_full <- ReadDataFromSS(db_obj, '* Frame 17 : Loan afforability test output *')
+    lafftt_output_show <- lafftt_output_full %>% 
+      dplyr::filter(show == 1) %>% 
+      dplyr::arrange(order)
+  })
+})
+
 pernw_show <- reactive({
   
   withProgress(message = 'Getting transaction details ...', {
@@ -217,5 +237,19 @@ observe({
   
   updateDateInput(session, 'pf_ipt_par_begdt', value = lubridate::floor_date(Sys.Date(),"month") - months(1))
   updateDateInput(session, 'pf_ipt_par_enddt', value = lubridate::ceiling_date(Sys.Date(),"month") - months(1) - days(1))
+  
+})
+
+cache_loan_mrtg_pymts <- reactive({
+  
+  meat <- lafftt_input_show()
+  house_prcs <- meat$default_value[meat$subcategory == 'new loan']/0.8
+  ids <- meat$id[meat$subcategory == 'new loan']
+  
+  mrtg_tbl <- AmortTableConstr(house_prcs, 0.03*100)
+  res <- mrtg_tbl$ft$monthly_payment
+  names(res) <- ids
+  
+  return(res)
   
 })

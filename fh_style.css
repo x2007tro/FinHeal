@@ -122,7 +122,17 @@ body {
   
 }
 
+.pf_res_loan_afftt_opt_div label{ 
+  display: table-cell; 
+  text-align: center;
+  vertical-align: middle; 
+}
+
 .pr_rpt_pernw_div .form-group { 
+  display: table-row;
+}
+
+.pf_res_loan_afftt_opt_div .form-group { 
   display: table-row;
 }
 

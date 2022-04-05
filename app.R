@@ -18,7 +18,6 @@ source("global.R", local = FALSE)
 source("iServer/main.R")
 source("iUI/main.R")
 
-
 ##
 # Launch shiny app
 ##

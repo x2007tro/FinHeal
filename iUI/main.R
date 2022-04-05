@@ -5,7 +5,8 @@ ui_files <- c('pf_rpt_pernw','pf_rpt_dashbd','pf_rpt_expsumm','pf_rpt_rntsumm','
               'pf_ipt_par','pf_ipt_trn','pf_ipt_ppm',
               'pf_fle_ul','pf_fle_dl',
               'pf_dat_exp',
-              'pf_res_nppty')
+              'pf_res_nppty',
+              'pf_res_loan_afftt')
 lapply(ui_files, function(f){
   source(paste0("./iUI/", f, ".R"), local = FALSE)
 })
@@ -41,8 +42,9 @@ mainUI <- fluidPage(theme = shinythemes::shinytheme("journal"),
         pf_fle_ul_tp,
         pf_fle_dl_tp,
         'Resource',
+        pf_res_loan_afftt_tp,
         pf_res_nppty_tp,
-        pf_dat_exp_tp
+        pf_dat_exp_tp,
       )
     ),
     tabPanel(
