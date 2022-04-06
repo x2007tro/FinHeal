@@ -87,7 +87,8 @@ observeEvent(input$pf_res_loan_afftt_ipt_run_test, {
     opt_gpi <- opt_gpi_ann/12
     opt_npi <- opt_gpi * (1 - tax_rate)
     opt_ri <- sum(ipt_vals[names(ipt_vals) %in% input[[paste0('pf_res_loan_afftt_ipt_', 'rental')]]])
-    opt_ri_rd <- opt_ri * sum(ipt_vals[names(ipt_vals) %in% input[[paste0('pf_res_loan_afftt_ipt_', 'rent inl ratio')]]])
+    ri_rd <- sum(ipt_vals[names(ipt_vals) %in% input[[paste0('pf_res_loan_afftt_ipt_', 'rent inl ratio')]]])
+    opt_ri_rd <- opt_ri * ri_rd
     opt_gti <- opt_gpi + opt_ri_rd
     opt_nti <- opt_npi + opt_ri
     
@@ -158,7 +159,7 @@ observeEvent(input$pf_res_loan_afftt_ipt_run_test, {
                 class = 'pf_res_loan_afftt_opt_div',
                 tags$table(
                   tags$tr(width = "100%",
-                          tags$td(width = "50%", div(style = "", 'rental income (reduced)')),
+                          tags$td(width = "50%", div(style = "", paste0('rental income (', scales::percent(ri_rd),')'))),
                           tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ri",i), label = NULL, value = scales::comma(opt_ri_rd, accuracy = 1))))
                 )
               ),
@@ -281,7 +282,7 @@ observeEvent(input$pf_res_loan_afftt_ipt_run_test, {
                 class = 'pf_res_loan_afftt_opt_div',
                 tags$table(
                   tags$tr(width = "100%",
-                          tags$td(width = "50%", div(style = "", 'rental income (reduced)')),
+                          tags$td(width = "50%", div(style = "", paste0('rental income (', scales::percent(ri_rd),')'))),
                           tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ri",i), label = NULL, value = scales::comma(opt_ri_rd, accuracy = 1))))
                 )
               ),
@@ -396,7 +397,7 @@ observeEvent(input$pf_res_loan_afftt_ipt_run_test, {
                 class = 'pf_res_loan_afftt_opt_div',
                 tags$table(
                   tags$tr(width = "100%",
-                          tags$td(width = "50%", div(style = "", 'net personal income')),
+                          tags$td(width = "50%", div(style = "", 'net personal income (60%)')),
                           tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_npi",i), label = NULL, value = scales::comma(opt_npi, accuracy = 1))))
                 )
               ),
