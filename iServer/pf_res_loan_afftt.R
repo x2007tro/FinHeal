@@ -76,6 +76,7 @@ output$pf_res_loan_afftt_ipt <- renderUI({
 })
 
 observeEvent(input$pf_res_loan_afftt_ipt_run_test, {
+  
   output$pf_res_loan_afftt_opt <- renderUI({
     # get values
     tax_rate <- 0.40
@@ -129,394 +130,347 @@ observeEvent(input$pf_res_loan_afftt_ipt_run_test, {
     names(tres) <- itms
     
     fluidRow(
-      
-      lapply(1:length(itms), function(i){
+      column(
+        12,
         
-        column(
-          12/length(itms),
+        tags$div(
+          class = 'block_inner_frame',
           
-          tags$h4(class = 'block_title', deps[i]),
-          tags$h5(class = 'block_summary', fmls[i]),
-          
-          if(itms[i] == 'tdsr'){
-            if(tres[itms[i]] <= tgts[i]){
-              res <- c('pass','fail')[1]
-              ab_lbl <- 'btn-success'
-            } else {
-              res <- c('pass','fail')[2]
-              ab_lbl <- 'btn-primary'
-            }
-            tagList(
-              tags$div(
-                class = 'pf_res_loan_afftt_opt_div',
-                tags$table(
-                  tags$tr(width = "100%",
-                          tags$td(width = "50%", div(style = "", 'gross personal income')),
-                          tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_gpi",i), label = NULL, value = scales::comma(opt_gpi, accuracy = 1))))
-                )
-              ),
-              tags$div(
-                class = 'pf_res_loan_afftt_opt_div',
-                tags$table(
-                  tags$tr(width = "100%",
-                          tags$td(width = "50%", div(style = "", paste0('rental income (', scales::percent(ri_rd),')'))),
-                          tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ri",i), label = NULL, value = scales::comma(opt_ri_rd, accuracy = 1))))
-                )
-              ),
-              tags$div(
-                class = 'pf_res_loan_afftt_opt_div',
-                tags$table(
-                  tags$tr(width = "100%",
-                          tags$td(width = "50%", div(style = "", 'total gross income')),
-                          tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ti",i), label = NULL, value = scales::comma(opt_gti, accuracy = 1))))
-                )
-              ), tags$br(),
-              tags$div(
-                class = 'pf_res_loan_afftt_opt_div',
-                tags$table(
-                  tags$tr(width = "100%",
-                          tags$td(width = "50%", div(style = "", 'down payment')),
-                          tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_dp",i), label = NULL, value = scales::comma(opt_dp, accuracy = 1))))
-                )
-              ),
-              tags$div(
-                class = 'pf_res_loan_afftt_opt_div',
-                tags$table(
-                  tags$tr(width = "100%",
-                          tags$td(width = "50%", div(style = "", 'new loan amount')),
-                          tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_la",i), label = NULL, value = scales::comma(opt_loan, accuracy = 1))))
-                )
-              ),
-              tags$div(
-                class = 'pf_res_loan_afftt_opt_div',
-                tags$table(
-                  tags$tr(width = "100%",
-                          tags$td(width = "50%", div(style = "", 'new property market value')),
-                          tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_npv",i), label = NULL, value = scales::comma(opt_npv, accuracy = 1))))
-                )
-              ),
-              tags$div(
-                class = 'pf_res_loan_afftt_opt_div',
-                tags$table(
-                  tags$tr(width = "100%",
-                          tags$td(width = "50%", div(style = "", 'new loan mortgage (3.0% I.R.)')),
-                          tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_nlm",i), label = NULL, value = scales::comma(opt_mrgt_pymt, accuracy = 1))))
-                )
-              ),
-              tags$div(
-                class = 'pf_res_loan_afftt_opt_div',
-                tags$table(
-                  tags$tr(width = "100%",
-                          tags$td(width = "50%", div(style = "", 'new loan property tax')),
-                          tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_nlpt",i), label = NULL, value = scales::comma(opt_ppty_tax, accuracy = 1))))
-                )
-              ),
-              tags$div(
-                class = 'pf_res_loan_afftt_opt_div',
-                tags$table(
-                  tags$tr(width = "100%",
-                          tags$td(width = "50%", div(style = "", 'new loan total expense')),
-                          tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ne",i), label = NULL, value = scales::comma(opt_ne, accuracy = 1))))
-                )
-              ), tags$br(),
-              tags$div(
-                class = 'pf_res_loan_afftt_opt_div',
-                tags$table(
-                  tags$tr(width = "100%",
-                          tags$td(width = "50%", div(style = "", 'existing expense')),
-                          tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ee",i), label = NULL, value = scales::comma(opt_ee, accuracy = 1))))
-                )
-              ),
-              tags$div(
-                class = 'pf_res_loan_afftt_opt_div',
-                tags$table(
-                  tags$tr(width = "100%",
-                          tags$td(width = "50%", div(style = "", 'total expense')),
-                          tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_te",i), label = NULL, value = scales::comma(opt_te, accuracy = 1))))
-                )
-              ), tags$br(),
-              tags$div(
-                class = 'pf_res_loan_afftt_opt_div',
-                tags$table(
-                  tags$tr(width = "100%",
-                          tags$td(width = "50%", div(style = "", 'actual ratio')),
-                          tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_atdsr",i), label = NULL, value = scales::percent(opt_atdsr))))
-                )
-              ),
-              tags$div(
-                class = 'pf_res_loan_afftt_opt_div',
-                tags$table(
-                  tags$tr(width = "100%",
-                          tags$td(width = "50%", div(style = "", 'maximum ratio')),
-                          tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ttdsr",i), label = NULL, value = scales::percent(tgts[i]))))
-                )
-              ),tags$br(),
-              tags$div(
-                class = 'pf_res_loan_afftt_opt_div',
-                tags$table(
-                  tags$tr(width = "100%",
-                          tags$td(width = "50%", div(style = "", '')),
-                          tags$td(width = "50%", actionButton(class = ab_lbl, paste0("pf_res_loan_afftt_opt_res",i), label = res, width = entry_wid_m)))
+          fluidRow(
+            column(
+              3,
+              tagList(
+                tags$h4(class = 'block_title', 'new loan'),
+                tags$h5(class = 'block_summary', 'mortgage and property tax'),
+                tags$div(
+                  class = 'pf_res_loan_afftt_opt_div',
+                  tags$table(
+                    tags$tr(width = "100%",
+                            tags$td(width = "50%", div(style = "", 'down payment')),
+                            tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_dp"), label = NULL, value = scales::comma(opt_dp, accuracy = 1))))
+                  )
+                ),
+                tags$div(
+                  class = 'pf_res_loan_afftt_opt_div',
+                  tags$table(
+                    tags$tr(width = "100%",
+                            tags$td(width = "50%", div(style = "", 'new loan amount')),
+                            tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_la"), label = NULL, value = scales::comma(opt_loan, accuracy = 1))))
+                  )
+                ),
+                tags$div(
+                  class = 'pf_res_loan_afftt_opt_div',
+                  tags$table(
+                    tags$tr(width = "100%",
+                            tags$td(width = "50%", div(style = "", 'new property market value')),
+                            tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_npv"), label = NULL, value = scales::comma(opt_npv, accuracy = 1))))
+                  )
+                ),
+                tags$div(
+                  class = 'pf_res_loan_afftt_opt_div',
+                  tags$table(
+                    tags$tr(width = "100%",
+                            tags$td(width = "50%", div(style = "", 'new loan mortgage (3.0% I.R.)')),
+                            tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_nlm"), label = NULL, value = scales::comma(opt_mrgt_pymt, accuracy = 1))))
+                  )
+                ),
+                tags$div(
+                  class = 'pf_res_loan_afftt_opt_div',
+                  tags$table(
+                    tags$tr(width = "100%",
+                            tags$td(width = "50%", div(style = "", 'new loan property tax')),
+                            tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_nlpt"), label = NULL, value = scales::comma(opt_ppty_tax, accuracy = 1))))
+                  )
+                ),
+                tags$div(
+                  class = 'pf_res_loan_afftt_opt_div',
+                  tags$table(
+                    tags$tr(width = "100%",
+                            tags$td(width = "50%", div(style = "", 'new loan total expense')),
+                            tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ne"), label = NULL, value = scales::comma(opt_ne, accuracy = 1))))
+                  )
                 )
               )
-            )
-            
-          } else if (itms[i] == 'gdsr') {
-            if(tres[itms[i]] <= tgts[i]){
-              res <- c('pass','fail')[1]
-              ab_lbl <- 'btn-success'
-            } else {
-              res <- c('pass','fail')[2]
-              ab_lbl <- 'btn-primary'
-            }
-            tagList(
-              tags$div(
-                class = 'pf_res_loan_afftt_opt_div',
-                tags$table(
-                  tags$tr(width = "100%",
-                          tags$td(width = "50%", div(style = "", 'gross personal income')),
-                          tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_gpi",i), label = NULL, value = scales::comma(opt_gpi, accuracy = 1))))
-                )
-              ),
-              tags$div(
-                class = 'pf_res_loan_afftt_opt_div',
-                tags$table(
-                  tags$tr(width = "100%",
-                          tags$td(width = "50%", div(style = "", paste0('rental income (', scales::percent(ri_rd),')'))),
-                          tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ri",i), label = NULL, value = scales::comma(opt_ri_rd, accuracy = 1))))
-                )
-              ),
-              tags$div(
-                class = 'pf_res_loan_afftt_opt_div',
-                tags$table(
-                  tags$tr(width = "100%",
-                          tags$td(width = "50%", div(style = "", 'total gross income')),
-                          tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ti",i), label = NULL, value = scales::comma(opt_gti, accuracy = 1))))
-                )
-              ), tags$br(),
-              tags$div(
-                class = 'pf_res_loan_afftt_opt_div',
-                tags$table(
-                  tags$tr(width = "100%",
-                          tags$td(width = "50%", div(style = "", 'down payment')),
-                          tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_dp",i), label = NULL, value = scales::comma(opt_dp, accuracy = 1))))
-                )
-              ),
-              tags$div(
-                class = 'pf_res_loan_afftt_opt_div',
-                tags$table(
-                  tags$tr(width = "100%",
-                          tags$td(width = "50%", div(style = "", 'new loan amount')),
-                          tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_la",i), label = NULL, value = scales::comma(opt_loan, accuracy = 1))))
-                )
-              ),
-              tags$div(
-                class = 'pf_res_loan_afftt_opt_div',
-                tags$table(
-                  tags$tr(width = "100%",
-                          tags$td(width = "50%", div(style = "", 'new property market value')),
-                          tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_npv",i), label = NULL, value = scales::comma(opt_npv, accuracy = 1))))
-                )
-              ),
-              tags$div(
-                class = 'pf_res_loan_afftt_opt_div',
-                tags$table(
-                  tags$tr(width = "100%",
-                          tags$td(width = "50%", div(style = "", 'new loan mortgage (3.0% I.R.)')),
-                          tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_nlm",i), label = NULL, value = scales::comma(opt_mrgt_pymt, accuracy = 1))))
-                )
-              ),
-              tags$div(
-                class = 'pf_res_loan_afftt_opt_div',
-                tags$table(
-                  tags$tr(width = "100%",
-                          tags$td(width = "50%", div(style = "", 'new loan property tax')),
-                          tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_nlpt",i), label = NULL, value = scales::comma(opt_ppty_tax, accuracy = 1))))
-                )
-              ),
-              tags$div(
-                class = 'pf_res_loan_afftt_opt_div',
-                tags$table(
-                  tags$tr(width = "100%",
-                          tags$td(width = "50%", div(style = "", 'new loan total expense')),
-                          tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ne",i), label = NULL, value = scales::comma(opt_ne, accuracy = 1))))
-                )
-              ), tags$br(),
-              tags$div(
-                class = 'pf_res_loan_afftt_opt_div',
-                tags$table(
-                  tags$tr(width = "100%",
-                          tags$td(width = "50%", div(style = "", 'existing expense (housing)')),
-                          tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ee",i), label = NULL, value = scales::comma(opt_ee_no_veh, accuracy = 1))))
-                )
-              ),
-              tags$div(
-                class = 'pf_res_loan_afftt_opt_div',
-                tags$table(
-                  tags$tr(width = "100%",
-                          tags$td(width = "50%", div(style = "", 'total expense (housing)')),
-                          tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_te",i), label = NULL, value = scales::comma(opt_te_no_veh, accuracy = 1))))
-                )
-              ), tags$br(),
-              tags$div(
-                class = 'pf_res_loan_afftt_opt_div',
-                tags$table(
-                  tags$tr(width = "100%",
-                          tags$td(width = "50%", div(style = "", 'actual ratio')),
-                          tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_agdsr",i), label = NULL, value = scales::percent(opt_agdsr))))
-                )
-              ),
-              tags$div(
-                class = 'pf_res_loan_afftt_opt_div',
-                tags$table(
-                  tags$tr(width = "100%",
-                          tags$td(width = "50%", div(style = "", 'maximum ratio')),
-                          tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_tgdsr",i), label = NULL, value = scales::percent(tgts[i]))))
-                )
-              ),tags$br(),
-              tags$div(
-                class = 'pf_res_loan_afftt_opt_div',
-                tags$table(
-                  tags$tr(width = "100%",
-                          tags$td(width = "50%", div(style = "", '')),
-                          tags$td(width = "50%", actionButton(class = ab_lbl, paste0("pf_res_loan_afftt_opt_res",i), label = res, width = entry_wid_m)))
-                )
+            ),
+            column(
+              9,
+              fluidRow(
+                
+                lapply(1:length(itms), function(i){
+                  
+                  column(
+                    12/length(itms),
+                    
+                    tags$h4(class = 'block_title', deps[i]),
+                    tags$h5(class = 'block_summary', fmls[i]),
+                    
+                    if(itms[i] == 'tdsr'){
+                      if(tres[itms[i]] <= tgts[i]){
+                        res <- c('pass','fail')[1]
+                        ab_lbl <- 'btn-success'
+                      } else {
+                        res <- c('pass','fail')[2]
+                        ab_lbl <- 'btn-primary'
+                      }
+                      tagList(
+                        tags$div(
+                          class = 'pf_res_loan_afftt_opt_div',
+                          tags$table(
+                            tags$tr(width = "100%",
+                                    tags$td(width = "50%", div(style = "", 'gross personal income')),
+                                    tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_gpi",i), label = NULL, value = scales::comma(opt_gpi, accuracy = 1))))
+                          )
+                        ),
+                        tags$div(
+                          class = 'pf_res_loan_afftt_opt_div',
+                          tags$table(
+                            tags$tr(width = "100%",
+                                    tags$td(width = "50%", div(style = "", paste0('rental income (', scales::percent(ri_rd, accuracy = 1),')'))),
+                                    tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ri",i), label = NULL, value = scales::comma(opt_ri_rd, accuracy = 1))))
+                          )
+                        ),
+                        tags$div(
+                          class = 'pf_res_loan_afftt_opt_div',
+                          tags$table(
+                            tags$tr(width = "100%",
+                                    tags$td(width = "50%", div(style = "", 'total gross income')),
+                                    tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ti",i), label = NULL, value = scales::comma(opt_gti, accuracy = 1))))
+                          )
+                        ), tags$br(),
+                        tags$div(
+                          class = 'pf_res_loan_afftt_opt_div',
+                          tags$table(
+                            tags$tr(width = "100%",
+                                    tags$td(width = "50%", div(style = "", 'new loan expense')),
+                                    tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ne"), label = NULL, value = scales::comma(opt_ne, accuracy = 1))))
+                          )
+                        ),
+                        tags$div(
+                          class = 'pf_res_loan_afftt_opt_div',
+                          tags$table(
+                            tags$tr(width = "100%",
+                                    tags$td(width = "50%", div(style = "", 'existing expense')),
+                                    tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ee",i), label = NULL, value = scales::comma(opt_ee, accuracy = 1))))
+                          )
+                        ),
+                        tags$div(
+                          class = 'pf_res_loan_afftt_opt_div',
+                          tags$table(
+                            tags$tr(width = "100%",
+                                    tags$td(width = "50%", div(style = "", 'total expense')),
+                                    tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_te",i), label = NULL, value = scales::comma(opt_te, accuracy = 1))))
+                          )
+                        ), tags$br(),
+                        tags$div(
+                          class = 'pf_res_loan_afftt_opt_div',
+                          tags$table(
+                            tags$tr(width = "100%",
+                                    tags$td(width = "50%", div(style = "", 'actual ratio')),
+                                    tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_atdsr",i), label = NULL, value = scales::percent(opt_atdsr))))
+                          )
+                        ),
+                        tags$div(
+                          class = 'pf_res_loan_afftt_opt_div',
+                          tags$table(
+                            tags$tr(width = "100%",
+                                    tags$td(width = "50%", div(style = "", 'maximum ratio')),
+                                    tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ttdsr",i), label = NULL, value = scales::percent(tgts[i]))))
+                          )
+                        ),tags$br(),
+                        tags$div(
+                          class = 'pf_res_loan_afftt_opt_div',
+                          tags$table(
+                            tags$tr(width = "100%",
+                                    tags$td(width = "50%", div(style = "", '')),
+                                    tags$td(width = "50%", actionButton(class = ab_lbl, paste0("pf_res_loan_afftt_opt_res",i), label = res, width = entry_wid_m)))
+                          )
+                        )
+                      )
+                      
+                    } else if (itms[i] == 'gdsr') {
+                      if(tres[itms[i]] <= tgts[i]){
+                        res <- c('pass','fail')[1]
+                        ab_lbl <- 'btn-success'
+                      } else {
+                        res <- c('pass','fail')[2]
+                        ab_lbl <- 'btn-primary'
+                      }
+                      tagList(
+                        tags$div(
+                          class = 'pf_res_loan_afftt_opt_div',
+                          tags$table(
+                            tags$tr(width = "100%",
+                                    tags$td(width = "50%", div(style = "", 'gross personal income')),
+                                    tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_gpi",i), label = NULL, value = scales::comma(opt_gpi, accuracy = 1))))
+                          )
+                        ),
+                        tags$div(
+                          class = 'pf_res_loan_afftt_opt_div',
+                          tags$table(
+                            tags$tr(width = "100%",
+                                    tags$td(width = "50%", div(style = "", paste0('rental income (', scales::percent(ri_rd, accuracy = 1),')'))),
+                                    tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ri",i), label = NULL, value = scales::comma(opt_ri_rd, accuracy = 1))))
+                          )
+                        ),
+                        tags$div(
+                          class = 'pf_res_loan_afftt_opt_div',
+                          tags$table(
+                            tags$tr(width = "100%",
+                                    tags$td(width = "50%", div(style = "", 'total gross income')),
+                                    tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ti",i), label = NULL, value = scales::comma(opt_gti, accuracy = 1))))
+                          )
+                        ), tags$br(),
+                        tags$div(
+                          class = 'pf_res_loan_afftt_opt_div',
+                          tags$table(
+                            tags$tr(width = "100%",
+                                    tags$td(width = "50%", div(style = "", 'new loan expense')),
+                                    tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ne",i), label = NULL, value = scales::comma(opt_ne, accuracy = 1))))
+                          )
+                        ),
+                        tags$div(
+                          class = 'pf_res_loan_afftt_opt_div',
+                          tags$table(
+                            tags$tr(width = "100%",
+                                    tags$td(width = "50%", div(style = "", 'existing expense (housing)')),
+                                    tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ee",i), label = NULL, value = scales::comma(opt_ee_no_veh, accuracy = 1))))
+                          )
+                        ),
+                        tags$div(
+                          class = 'pf_res_loan_afftt_opt_div',
+                          tags$table(
+                            tags$tr(width = "100%",
+                                    tags$td(width = "50%", div(style = "", 'total expense (housing)')),
+                                    tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_te",i), label = NULL, value = scales::comma(opt_te_no_veh, accuracy = 1))))
+                          )
+                        ), tags$br(),
+                        tags$div(
+                          class = 'pf_res_loan_afftt_opt_div',
+                          tags$table(
+                            tags$tr(width = "100%",
+                                    tags$td(width = "50%", div(style = "", 'actual ratio')),
+                                    tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_agdsr",i), label = NULL, value = scales::percent(opt_agdsr))))
+                          )
+                        ),
+                        tags$div(
+                          class = 'pf_res_loan_afftt_opt_div',
+                          tags$table(
+                            tags$tr(width = "100%",
+                                    tags$td(width = "50%", div(style = "", 'maximum ratio')),
+                                    tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_tgdsr",i), label = NULL, value = scales::percent(tgts[i]))))
+                          )
+                        ),tags$br(),
+                        tags$div(
+                          class = 'pf_res_loan_afftt_opt_div',
+                          tags$table(
+                            tags$tr(width = "100%",
+                                    tags$td(width = "50%", div(style = "", '')),
+                                    tags$td(width = "50%", actionButton(class = ab_lbl, paste0("pf_res_loan_afftt_opt_res",i), label = res, width = entry_wid_m)))
+                          )
+                        )
+                      )
+                      
+                    } else if (itms[i] == 'nsp') {
+                      if(tres[itms[i]] >= tgts[i]){
+                        res <- c('pass','fail')[1]
+                        ab_lbl <- 'btn-success'
+                      } else {
+                        res <- c('pass','fail')[2]
+                        ab_lbl <- 'btn-primary'
+                      }
+                      tagList(
+                        tags$div(
+                          class = 'pf_res_loan_afftt_opt_div',
+                          tags$table(
+                            tags$tr(width = "100%",
+                                    tags$td(width = "50%", div(style = "", 'net personal income (60%)')),
+                                    tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_npi",i), label = NULL, value = scales::comma(opt_npi, accuracy = 1))))
+                          )
+                        ),
+                        tags$div(
+                          class = 'pf_res_loan_afftt_opt_div',
+                          tags$table(
+                            tags$tr(width = "100%",
+                                    tags$td(width = "50%", div(style = "", 'rental income')),
+                                    tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ri",i), label = NULL, value = scales::comma(opt_ri, accuracy = 1))))
+                          )
+                        ),
+                        tags$div(
+                          class = 'pf_res_loan_afftt_opt_div',
+                          tags$table(
+                            tags$tr(width = "100%",
+                                    tags$td(width = "50%", div(style = "", 'total net income')),
+                                    tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ti",i), label = NULL, value = scales::comma(opt_nti, accuracy = 1))))
+                          )
+                        ), tags$br(),
+                        tags$div(
+                          class = 'pf_res_loan_afftt_opt_div',
+                          tags$table(
+                            tags$tr(width = "100%",
+                                    tags$td(width = "50%", div(style = "", 'new loan expense')),
+                                    tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ne",i), label = NULL, value = scales::comma(opt_ne, accuracy = 1))))
+                          )
+                        ), 
+                        tags$div(
+                          class = 'pf_res_loan_afftt_opt_div',
+                          tags$table(
+                            tags$tr(width = "100%",
+                                    tags$td(width = "50%", div(style = "", 'existing expense')),
+                                    tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ee",i), label = NULL, value = scales::comma(opt_ee, accuracy = 1))))
+                          )
+                        ),
+                        tags$div(
+                          class = 'pf_res_loan_afftt_opt_div',
+                          tags$table(
+                            tags$tr(width = "100%",
+                                    tags$td(width = "50%", div(style = "", 'total expense')),
+                                    tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_te",i), label = NULL, value = scales::comma(opt_te, accuracy = 1))))
+                          )
+                        ), tags$br(),
+                        tags$div(
+                          class = 'pf_res_loan_afftt_opt_div',
+                          tags$table(
+                            tags$tr(width = "100%",
+                                    tags$td(width = "50%", div(style = "", 'actual spending power')),
+                                    tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ansp",i), label = NULL, value = scales::comma(opt_nsp, accuracy = 1))))
+                          )
+                        ),
+                        tags$div(
+                          class = 'pf_res_loan_afftt_opt_div',
+                          tags$table(
+                            tags$tr(width = "100%",
+                                    tags$td(width = "50%", div(style = "", 'minimum spending power')),
+                                    tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_tnsp",i), label = NULL, value = scales::comma(tgts[i], accuracy = 1))))
+                          )
+                        ),tags$br(),
+                        tags$div(
+                          class = 'pf_res_loan_afftt_opt_div',
+                          tags$table(
+                            tags$tr(width = "100%",
+                                    tags$td(width = "50%", div(style = "", '')),
+                                    tags$td(width = "50%", actionButton(class = ab_lbl, paste0("pf_res_loan_afftt_opt_res",i), label = res, width = entry_wid_m)))
+                          )
+                        )
+                      )
+                      
+                    } else {
+                      # nothing
+                    }
+                    
+                  )
+                  
+                  
+                })
+                
               )
             )
-            
-          } else if (itms[i] == 'nsp') {
-            if(tres[itms[i]] >= tgts[i]){
-              res <- c('pass','fail')[1]
-              ab_lbl <- 'btn-success'
-            } else {
-              res <- c('pass','fail')[2]
-              ab_lbl <- 'btn-primary'
-            }
-            tagList(
-              tags$div(
-                class = 'pf_res_loan_afftt_opt_div',
-                tags$table(
-                  tags$tr(width = "100%",
-                          tags$td(width = "50%", div(style = "", 'net personal income (60%)')),
-                          tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_npi",i), label = NULL, value = scales::comma(opt_npi, accuracy = 1))))
-                )
-              ),
-              tags$div(
-                class = 'pf_res_loan_afftt_opt_div',
-                tags$table(
-                  tags$tr(width = "100%",
-                          tags$td(width = "50%", div(style = "", 'rental income')),
-                          tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ri",i), label = NULL, value = scales::comma(opt_ri, accuracy = 1))))
-                )
-              ),
-              tags$div(
-                class = 'pf_res_loan_afftt_opt_div',
-                tags$table(
-                  tags$tr(width = "100%",
-                          tags$td(width = "50%", div(style = "", 'total net income')),
-                          tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ti",i), label = NULL, value = scales::comma(opt_nti, accuracy = 1))))
-                )
-              ), tags$br(),
-              tags$div(
-                class = 'pf_res_loan_afftt_opt_div',
-                tags$table(
-                  tags$tr(width = "100%",
-                          tags$td(width = "50%", div(style = "", 'down payment')),
-                          tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_dp",i), label = NULL, value = scales::comma(opt_dp, accuracy = 1))))
-                )
-              ),
-              tags$div(
-                class = 'pf_res_loan_afftt_opt_div',
-                tags$table(
-                  tags$tr(width = "100%",
-                          tags$td(width = "50%", div(style = "", 'new loan amount')),
-                          tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_la",i), label = NULL, value = scales::comma(opt_loan, accuracy = 1))))
-                )
-              ),
-              tags$div(
-                class = 'pf_res_loan_afftt_opt_div',
-                tags$table(
-                  tags$tr(width = "100%",
-                          tags$td(width = "50%", div(style = "", 'new property market value')),
-                          tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_npv",i), label = NULL, value = scales::comma(opt_npv, accuracy = 1))))
-                )
-              ),
-              tags$div(
-                class = 'pf_res_loan_afftt_opt_div',
-                tags$table(
-                  tags$tr(width = "100%",
-                          tags$td(width = "50%", div(style = "", 'new loan mortgage (3.0% I.R.)')),
-                          tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_nlm",i), label = NULL, value = scales::comma(opt_mrgt_pymt, accuracy = 1))))
-                )
-              ),
-              tags$div(
-                class = 'pf_res_loan_afftt_opt_div',
-                tags$table(
-                  tags$tr(width = "100%",
-                          tags$td(width = "50%", div(style = "", 'new loan property tax')),
-                          tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_nlpt",i), label = NULL, value = scales::comma(opt_ppty_tax, accuracy = 1))))
-                )
-              ),
-              tags$div(
-                class = 'pf_res_loan_afftt_opt_div',
-                tags$table(
-                  tags$tr(width = "100%",
-                          tags$td(width = "50%", div(style = "", 'new loan total expense')),
-                          tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ne",i), label = NULL, value = scales::comma(opt_ne, accuracy = 1))))
-                )
-              ), tags$br(),
-              tags$div(
-                class = 'pf_res_loan_afftt_opt_div',
-                tags$table(
-                  tags$tr(width = "100%",
-                          tags$td(width = "50%", div(style = "", 'existing expense')),
-                          tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ee",i), label = NULL, value = scales::comma(opt_ee, accuracy = 1))))
-                )
-              ),
-              tags$div(
-                class = 'pf_res_loan_afftt_opt_div',
-                tags$table(
-                  tags$tr(width = "100%",
-                          tags$td(width = "50%", div(style = "", 'total expense')),
-                          tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_te",i), label = NULL, value = scales::comma(opt_te, accuracy = 1))))
-                )
-              ), tags$br(),
-              tags$div(
-                class = 'pf_res_loan_afftt_opt_div',
-                tags$table(
-                  tags$tr(width = "100%",
-                          tags$td(width = "50%", div(style = "", 'actual spending power')),
-                          tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ansp",i), label = NULL, value = scales::comma(opt_nsp, accuracy = 1))))
-                )
-              ),
-              tags$div(
-                class = 'pf_res_loan_afftt_opt_div',
-                tags$table(
-                  tags$tr(width = "100%",
-                          tags$td(width = "50%", div(style = "", 'minimum spending power')),
-                          tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_tnsp",i), label = NULL, value = scales::comma(tgts[i], accuracy = 1))))
-                )
-              ),tags$br(),
-              tags$div(
-                class = 'pf_res_loan_afftt_opt_div',
-                tags$table(
-                  tags$tr(width = "100%",
-                          tags$td(width = "50%", div(style = "", '')),
-                          tags$td(width = "50%", actionButton(class = ab_lbl, paste0("pf_res_loan_afftt_opt_res",i), label = res, width = entry_wid_m)))
-                )
-              )
-            )
-            
-          } else {
-            # nothing
-          }
+          )
           
         )
-        
-        
-      })
-      
+      )
     )
+    
+    
     
   })
 })
