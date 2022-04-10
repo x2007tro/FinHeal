@@ -94,9 +94,10 @@ observeEvent(input$pf_res_loan_afftt_ipt_run_test, {
     opt_nti <- opt_npi + opt_ri
     
     # loan
-    opt_dp <- sum(ipt_vals[names(ipt_vals) %in% input[[paste0('pf_res_loan_afftt_ipt_', 'down payment')]]])
+    opt_ps <- sum(ipt_vals[names(ipt_vals) %in% input[[paste0('pf_res_loan_afftt_ipt_', 'property sale')]]])
+    opt_cb <- sum(ipt_vals[names(ipt_vals) %in% input[[paste0('pf_res_loan_afftt_ipt_', 'cash balance')]]])
     opt_loan <- sum(ipt_vals[names(ipt_vals) %in% input[[paste0('pf_res_loan_afftt_ipt_', 'new loan')]]])
-    opt_npv <- opt_dp + opt_loan
+    opt_npv <- opt_ps + opt_cb + opt_loan
     opt_mrgt_pymt <- cache_loan_mrtg_pymts()[input[[paste0('pf_res_loan_afftt_ipt_', 'new loan')]]]
     ppty_tax_master <- pptytaxr_show() %>%
       dplyr::filter(year == lubridate::year(input$pf_ipt_par_begdt)) %>%
@@ -147,7 +148,7 @@ observeEvent(input$pf_res_loan_afftt_ipt_run_test, {
                   tags$table(
                     tags$tr(width = "100%",
                             tags$td(width = "50%", div(style = "", 'down payment')),
-                            tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_dp"), label = NULL, value = scales::comma(opt_dp, accuracy = 1))))
+                            tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_dp"), label = NULL, value = scales::comma(opt_ps + opt_cb, accuracy = 1))))
                   )
                 ),
                 tags$div(
