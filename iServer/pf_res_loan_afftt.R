@@ -171,7 +171,7 @@ observeEvent(input$pf_res_loan_afftt_ipt_run_test, {
                   class = 'pf_res_loan_afftt_opt_div',
                   tags$table(
                     tags$tr(width = "100%",
-                            tags$td(width = "50%", div(style = "", 'new loan mortgage (3.0% I.R.)')),
+                            tags$td(width = "50%", div(style = "", 'new loan mortgage (4.0% I.R.)')),
                             tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_nlm"), label = NULL, value = scales::comma(opt_mrgt_pymt, accuracy = 1))))
                   )
                 ),
