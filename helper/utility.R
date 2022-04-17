@@ -142,16 +142,18 @@ PSPPCalc <- function(income, tax_year, person = c("tong_li","ke_min","reserved_1
 # Get Financial information
 AmortTableConstr <- function(
   house_prcs,
+  existing_loan,
   irs
 ){
   res <- lapply(irs, function(ir){
     res2 <- lapply(house_prcs, function(hp){
-      mortgage(hp*0.8, ir, 25, T, F)
+      loan_amt <- max(0, hp*0.8 - existing_loan)
+      mortgage(loan_amt, ir, 25, T, F)
       
       df <- data.frame(
         `house_price` = hp,
         `down_payment_required` = hp*0.2,
-        `loan_amount` = hp*0.8,
+        `loan_amount` = loan_amt,
         `interest_rate` = ir,
         `monthly_payment` = round(monthPay,0),
         stringsAsFactors = FALSE
