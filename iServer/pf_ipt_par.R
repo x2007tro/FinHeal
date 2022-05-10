@@ -39,6 +39,54 @@ accounts_show <- reactive({
   })
 })
 
+creditcards_shownact <- reactive({
+  
+  withProgress(message = 'Getting credit card transaction details ...', {
+    accounts_full <- ReadDataFromSS(db_obj, '* Frame 01 : Account *')
+    accounts_show <- accounts_full %>% 
+      dplyr::filter(card_type == 1) %>% 
+      dplyr::arrange(order) %>% 
+      dplyr::select(name, spending_limit)
+  })
+})
+
+creditcards_trans_summ <- reactive({
+  
+  withProgress(message = 'Getting credit card transaction summary ...', {
+    cc <- creditcards_shownact()
+    transf <- transdata_full()
+    
+    by_month_cat <- cc %>% 
+      dplyr::left_join(transf, by = c('name' = 'account')) %>% 
+      dplyr::filter(transaction_date >= Sys.Date() - years(5)) %>% 
+      dplyr::mutate(transaction_year = lubridate::year(transaction_date), transaction_month = lubridate::month(transaction_date)) %>% 
+      dplyr::group_by(transaction_year, transaction_month, name, category, hyper_category) %>% 
+      dplyr::summarise(amt = sum(amount))
+    
+    by_year_cat <- by_month_cat %>% 
+      dplyr::group_by(transaction_year, name, category, hyper_category) %>% 
+      dplyr::summarise(amt = sum(amt))
+    
+    by_month <- by_month_cat %>% 
+      dplyr::group_by(transaction_year, transaction_month, name) %>% 
+      dplyr::summarise(amt = sum(amt))
+    
+    by_year <- by_year_cat %>% 
+      dplyr::group_by(transaction_year, name) %>% 
+      dplyr::summarise(amt = sum(amt))
+    
+    tmp <- list(
+      by_month_cat = by_month_cat,
+      by_year_cat = by_year_cat,
+      by_month = by_month,
+      by_year = by_year
+    )
+    
+    tmp
+  })
+
+})
+
 opertype_show <- reactive({
   
   withProgress(message = 'Getting transaction details ...', {

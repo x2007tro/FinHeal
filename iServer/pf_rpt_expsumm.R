@@ -67,3 +67,65 @@ output$pf_rpt_expsumm_p4 <- renderPlot({
   })
   
 })
+
+output$pf_rpt_cc_summ <- renderUI({
+  
+  tagList(
+    lapply(1:1, function(i){
+      fluidRow(
+        column(
+          12,
+          
+          tags$div(
+            class = 'block_inner_frame',
+            fluidRow(
+              column(
+                12,
+                tags$h4(class = 'block_title', 'By Year'),
+                plotOutput(paste0('pf_rpt_cc_summ_byyear', i))
+              )
+            ),
+            fluidRow(
+              column(
+                12,
+                tags$h4(class = 'block_title', 'By Month'),
+                plotOutput(paste0('pf_rpt_cc_summ_bymonth', i))
+              )
+            )
+          
+          )
+        )
+      )
+    })
+  )
+  
+})
+
+observe({
+  
+  cc_trans_byyear <- creditcards_trans_summ()$by_year
+  cc_trans_bymonth <- creditcards_trans_summ()$by_month
+  
+  lapply(1:1, function(i){
+    
+    tmp_byyear <- cc_trans_byyear %>% 
+      dplyr::rename(type = transaction_year, value = amt)
+    
+    tmp_bymonth <- cc_trans_bymonth %>% 
+      dplyr::filter(transaction_year == lubridate::year(Sys.Date())) %>% 
+      # dplyr::mutate(type = paste0(transaction_year, "-", transaction_month)) %>% 
+      dplyr::mutate(type = paste0(transaction_month)) %>% 
+      dplyr::rename(value = amt)
+    
+    output[[paste0('pf_rpt_cc_summ_byyear', i)]] <- renderPlot({
+      SimpleSummaryPlot(tmp_byyear, legend_pos = 'bottom')
+    })
+    
+    output[[paste0('pf_rpt_cc_summ_bymonth', i)]] <- renderPlot({
+      SimpleSummaryPlot(tmp_bymonth, legend_pos = 'bottom')
+    })
+    
+  })
+  
+  
+})

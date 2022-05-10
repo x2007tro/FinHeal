@@ -45,6 +45,34 @@ SummaryPlot <- function(plot_data, text_degr = 0, legend_pos = 'right'){
   return(plot_me)
 }
 
+SimpleSummaryPlot <- function(plot_data, text_degr = 0, legend_pos = 'right'){
+  plot_me <- ggplot(plot_data, aes(x = type, y = value, fill = name)) + 
+    geom_bar(stat="identity") + 
+    facet_grid(.~name) +
+    geom_text(
+      aes(label = scales::comma(plot_data$value, accuracy = 1), fontface = 'bold'),
+      colour = plot_font_color,
+      position = position_stack(vjust = 0.5),
+      #nudge_x = 0, nudge_y = -0.5,
+      #vjust = 0.5, 
+      #hjust = 0,
+      check_overlap = T
+    ) +
+    labs() +
+    theme(
+      strip.text.x = element_text(size = 13),
+      axis.text.x = element_text(angle = text_degr, size = 13, color = plot_font_color),
+      axis.title.x = element_blank(),
+      axis.title.y = element_blank(),
+      rect = element_rect(fill = '#f2f2f2'),
+      panel.background = element_rect(fill = '#f2f2f2'),
+      plot.background = element_rect(fill = '#f2f2f2', color = '#f2f2f2'),
+      legend.position = legend_pos,
+      legend.text = element_text(color = plot_font_color),
+      legend.title = element_text(color = plot_font_color))
+  return(plot_me)
+}
+
 ExpCatPlot <- function(plot_data, plot_type, lenged_pos = 'right'){
   if(plot_type == 'pie'){
     plot_me <- pie(plot_data$value, labels = paste0(plot_data$category, " (", plot_data$value, ")"),
