@@ -58,7 +58,7 @@ creditcards_trans_summ <- reactive({
     
     by_month_cat <- cc %>% 
       dplyr::left_join(transf, by = c('name' = 'account')) %>% 
-      dplyr::filter(transaction_date >= Sys.Date() - years(5)) %>% 
+      dplyr::filter(transaction_date >= Sys.Date() - years(3)) %>% 
       dplyr::mutate(transaction_year = lubridate::year(transaction_date), transaction_month = lubridate::month(transaction_date)) %>% 
       dplyr::group_by(transaction_year, transaction_month, name, category, hyper_category) %>% 
       dplyr::summarise(amt = sum(amount))
