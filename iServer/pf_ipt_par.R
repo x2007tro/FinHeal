@@ -242,7 +242,7 @@ land_show <- reactive({
   withProgress(message = 'Getting transaction details ...', {
     land_full <- ReadDataFromSS(db_obj, '* Frame 15 : Land *')
     land_show <- land_full %>% 
-      dplyr::filter(show == 1) %>% 
+      dplyr::filter(show == 1 & active == 1) %>% 
       dplyr::arrange(order)
   })
 })

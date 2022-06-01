@@ -59,6 +59,8 @@ observe({
                               class = 'block_inner_frame',
                               tags$h4(class = 'block_title', "Income"),
                               tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_inc_rent"), label = "rent", value = 0, width = entry_wid_l)),
+                              tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_inc_laundry"), label = "laundry", value = 0, width = entry_wid_l)),
+                              tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_inc_storage"), label = "storage", value = 0, width = entry_wid_l)),
                               tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_inc_other"), label = "other", value = 0, width = entry_wid_l))
                             )
                             
@@ -86,7 +88,7 @@ observe({
                             tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_ppm_mgmtfee"), label = "management fee", value = property_shownact()$exp_pm_fee_perc[i], width = entry_wid_l)),
                             tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_ppm_lawncare"), label = "lawn care", value = property_shownact()$exp_lawn_care[i], width = entry_wid_l)),
                             tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_ppm_snowrem"), label = "snow removal", value = property_shownact()$exp_snow_removal[i], width = entry_wid_l)),
-                            tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_ppm_cashadvfee"), label = "cash advance", value = property_shownact()$exp_cash_adv_fee[i], width = entry_wid_l)),
+                            tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_ppm_phonebill"), label = "phone bill", value = property_shownact()$exp_phone_bill[i], width = entry_wid_l)),
                             tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_ppm_cleaning"), label = "cleaning", value = property_shownact()$exp_cleaning[i], width = entry_wid_l))
                           )
                         )
@@ -115,9 +117,12 @@ observe({
                           column(
                             12,
                             tags$h4(class = 'block_title', "Additional"),
-                            tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_1"), label = "reserved", value = 0, width = entry_wid_l)),
-                            tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_2"), label = "reserved", value = 0, width = entry_wid_l)),
-                            tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_3"), label = "reserved", value = 0, width = entry_wid_l))
+                            tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_1"), label = "banking fee", value = 0, width = entry_wid_l)),
+                            tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_2"), label = "rent reimburse", value = 0, width = entry_wid_l)),
+                            tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_3"), label = "labor", value = 0, width = entry_wid_l)),
+                            tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_4"), label = "equipment", value = 0, width = entry_wid_l)),
+                            tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_5"), label = "upgrades", value = 0, width = entry_wid_l)),
+                            tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_6"), label = "reserved", value = 0, width = entry_wid_l))
                           )
                         )
                       )
@@ -167,25 +172,30 @@ observe({
       showNotification("Transactions are being entered to DB...", type = 'message')
       
       dates <- input$pf_ipt_par_begdt
-      desc <- c('rental income','other income',
+      desc <- c('rental income','Laundry income','Storage income','other income',
                 'mortgage principal','mortgage interest',
                 'management fee','lawn care','snow removal','cash advance fee','cleaning',
                 'property tax','utility','insurance','water & sewer','maintenance','strata',
-                'extra 1', 'extra 2', 'extra 3')
-      amnt <- c( input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_inc_rent")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_inc_other")]],
+                'banking fee', 'rent reimburse', 'labor', 'equipment', 'upgrade', 'additional')
+      amnt <- c( input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_inc_rent")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_inc_laundry")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_inc_storage")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_inc_other")]],
                  input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_mort_prl")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_mort_int")]],
-                 input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_ppm_mgmtfee")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_ppm_lawncare")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_ppm_snowrem")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_ppm_cashadvfee")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_ppm_cleaning")]], 
+                 input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_ppm_mgmtfee")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_ppm_lawncare")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_ppm_snowrem")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_ppm_phonebill")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_ppm_cleaning")]], 
                  input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_exp_pptytax")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_exp_util")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_exp_insu")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_exp_watnsew")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_exp_main")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_exp_strata")]],
-                 input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_1")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_2")]],  input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_3")]])
+                 input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_1")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_2")]],  input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_3")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_4")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_5")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_6")]])
       ppty <- curr_ppty_nm
-      ctgr <- c('Rental Income','Other Rental Income',
+      ctgr <- c('Rental Income','Laundry Income','Storage Income','Other Rental Income',
                 'Mortgage Principal','Mortgage Interest',
-                'Property Management','Lawn Care','Snow Removal','Bill Advance Fee','Cleaning',
+                'Property Management','Lawn Care','Snow Removal','Phone Bill','Cleaning',
                 'Property Tax','Utilities','Home Insurance','Water & Sewer', 'Maintenance', 'Strata',
-                'PM Reserved 1','PM Reserved 2','PM Reserved 3')
+                'PM Reserved 1','PM Reserved 1','PM Reserved 1','PM Reserved 2','PM Reserved 2','PM Reserved 3')
       hyctgr <- sapply(1:length(ctgr), function(x){ transcat_show()$hyper_category[transcat_show()$name == ctgr[x]] })
       recu <- TRUE
       cmts <- ''
+      
+      #print((desc))
+      #print((amnt))
+      #print((ctgr))
+      #print((hyctgr))
       
       exp_df <- data.frame(
         id = 0,
