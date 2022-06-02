@@ -47,7 +47,7 @@ observe({
     
     output[[paste0("pf_res_nppty_amor_tbl_", curr_intrt_id)]] <- DT::renderDataTable({
       house_prcs <- seq(from = 500000, to = 2000000, by = 100000)
-      res <- AmortTableConstr(house_prcs, curr_intrt_rate*100)
+      res <- AmortTableConstr(house_prcs, 0, curr_intrt_rate*100)
       DT::datatable(
         res$ft,
         options = list(
