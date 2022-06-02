@@ -174,7 +174,7 @@ observe({
       dates <- input$pf_ipt_par_begdt
       desc <- c('rental income','Laundry income','Storage income','other income',
                 'mortgage principal','mortgage interest',
-                'management fee','lawn care','snow removal','cash advance fee','cleaning',
+                'management fee','lawn care','snow removal','phone bill','cleaning',
                 'property tax','utility','insurance','water & sewer','maintenance','strata',
                 'banking fee', 'rent reimburse', 'labor', 'equipment', 'upgrade', 'additional')
       amnt <- c( input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_inc_rent")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_inc_laundry")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_inc_storage")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_inc_other")]],
@@ -185,9 +185,9 @@ observe({
       ppty <- curr_ppty_nm
       ctgr <- c('Rental Income','Laundry Income','Storage Income','Other Rental Income',
                 'Mortgage Principal','Mortgage Interest',
-                'Property Management','Lawn Care','Snow Removal','Phone Bill','Cleaning',
-                'Property Tax','Utilities','Home Insurance','Water & Sewer', 'Maintenance', 'Strata',
-                'PM Reserved 1','PM Reserved 1','PM Reserved 1','PM Reserved 2','PM Reserved 2','PM Reserved 3')
+                'Property Management','Lawn Care','Snow Removal','Business Phone Bill','Cleaning',
+                'Property Tax','Utilities','Business Insurance','Water & Sewer', 'Building Maintenance', 'Strata',
+                'Business Banking Fee','Rent Reimburse','Labor','Building Equipment','Building Upgrade','PM Reserved')
       hyctgr <- sapply(1:length(ctgr), function(x){ transcat_show()$hyper_category[transcat_show()$name == ctgr[x]] })
       recu <- TRUE
       cmts <- ''

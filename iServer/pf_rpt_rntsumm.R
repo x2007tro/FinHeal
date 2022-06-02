@@ -20,7 +20,20 @@ observe({
     curr_ppty_ot <- property_show()$operation_type[i]
     
     withProgress(message = 'Retrieving transaction details ...', {
-      summ_data <- transdata_full() %>% 
+      breakdown_data_cy <- transdata_full() %>% 
+        dplyr::filter(property == curr_ppty_nm & operation_type == curr_ppty_ot) %>%
+        dplyr::filter(lubridate::year(transaction_date) == lubridate::year(input$pf_ipt_par_begdt)) %>% 
+        #dplyr::filter(transaction_date <= input$pf_ipt_par_enddt) %>% 
+        dplyr::filter(hyper_category != 'Income') %>% 
+        dplyr::group_by(category) %>% 
+        dplyr::summarise(value = round(sum(amount))) %>% 
+        dplyr::filter(value > 0) %>% 
+        dplyr::arrange(value)
+    })
+    head(breakdown_data_cy)
+    
+    withProgress(message = 'Retrieving transaction details ...', {
+      summ_data_ay <- transdata_full() %>% 
         dplyr::filter(property == curr_ppty_nm & operation_type == curr_ppty_ot) %>% 
         dplyr::mutate(period = lubridate::year(transaction_date)) %>% 
         dplyr::mutate(category = ifelse(hyper_category == "Income","Income",ifelse(category == 'Mortgage Principal',"Mortgage Principal","Expense"))) %>% 
@@ -44,7 +57,7 @@ observe({
             end_balance = round(end_balance)
           )
         
-        net_income <- sum(summ_data[summ_data$category == 'Income','value']) - sum(summ_data[summ_data$category == 'Expense','value'])
+        net_income <- sum(summ_data_ay[summ_data_ay$category == 'Income','value']) - sum(summ_data_ay[summ_data_ay$category == 'Expense','value'])
         cap_gain <- ifelse(property_show()$sale_price[i] != 0, property_show()$sale_price[i] - property_show()$purchase_price[i], property_show()$appraisal_value[i] - property_show()$purchase_price[i])
         profit <- net_income + cap_gain
         
@@ -128,16 +141,16 @@ observe({
                     6,
                     tags$div(
                       class = 'block_inner_frame',
-                      tags$h4(class = 'block_title', "Summary by Year"),
-                      plotOutput(paste0("pf_rpt_rntsumm_", curr_ppty_id, "_plot"))
+                      tags$h4(class = 'block_title', "Current Year Breakdown"),
+                      plotOutput(paste0("pf_rpt_rntsumm_", curr_ppty_id, "_plot1"))
                     )
                   ),
                   column(
                     6,
                     tags$div(
                       class = 'block_inner_frame',
-                      tags$h4(class = 'block_title', "Summary by Year"),
-                      DT::dataTableOutput(paste0("pf_rpt_rntsumm_", curr_ppty_id, "_table"))
+                      tags$h4(class = 'block_title', "All Years Summary"),
+                      plotOutput(paste0("pf_rpt_rntsumm_", curr_ppty_id, "_plot2"))
                     )
                   )
                 )
@@ -148,25 +161,16 @@ observe({
       })
     })
     
-    output[[paste0("pf_rpt_rntsumm_", curr_ppty_id, "_table")]] <- DT::renderDataTable({
+    output[[paste0("pf_rpt_rntsumm_", curr_ppty_id, "_plot1")]] <- renderPlot({
       withProgress(message = 'Retrieving transaction details ...', {
-        DT::datatable(
-          summ_data,
-          options = list(
-            pageLength = 10,
-            orderClasses = FALSE,
-            searching = TRUE,
-            paging = TRUE
-          )
-        ) %>% 
-          DT::formatRound('value', digits = 0)
+        ExpCatPlot(breakdown_data_cy, c('pie','treemap')[2])
       })
       
     })
     
-    output[[paste0("pf_rpt_rntsumm_", curr_ppty_id, "_plot")]] <- renderPlot({
+    output[[paste0("pf_rpt_rntsumm_", curr_ppty_id, "_plot2")]] <- renderPlot({
       withProgress(message = 'Retrieving transaction details ...', {
-        SummaryPlot(summ_data, 0)
+        SummaryPlot(summ_data_ay, 0)
       })
       
     })
