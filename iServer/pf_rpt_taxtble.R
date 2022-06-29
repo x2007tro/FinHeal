@@ -57,7 +57,7 @@ observe({
         tagList(
           fluidRow(
             column(
-              6,
+              4,
               tags$div(
                 #class = 'block_inner_frame',
                 tags$h5(paste0("Income (", tax_year, ")")),
@@ -65,21 +65,30 @@ observe({
                 tags$div(class = "pf_rpt_taxtble_div", numericInput(paste0("pf_rpt_taxtble_",curr_pers_id,"_inc_bos"), label = "bonus", value = curr_pers_bonus, min = 0, width = entry_wid_m)),
                 tags$div(class = "pf_rpt_taxtble_div", numericInput(paste0("pf_rpt_taxtble_",curr_pers_id,"_inc_oin"), label = "other income", value = curr_pers_other_income, min = 0, width = entry_wid_m)),
                 tags$div(class = "pf_rpt_taxtble_div", numericInput(paste0("pf_rpt_taxtble_",curr_pers_id,"_inc_off"), label = "offset income", value = 0, min = 0, width = entry_wid_m)),
-                tags$div(class = "pf_rpt_taxtble_div", numericInput(paste0("pf_rpt_taxtble_",curr_pers_id,"_inc_rrsp"), label = "RRSP Contribution Limit", value = curr_taxpar[[paste0(curr_pers_id, "_rrsp_max_contribution")]], width = entry_wid_m)),
-                tags$div(class = "pf_rpt_taxtble_div", numericInput(paste0("pf_rpt_taxtble_",curr_pers_id,"_inc_tfsa"), label = "TFSA Contribution Limit", value = curr_taxpar[[paste0(curr_pers_id, "_tfsa_max_contribution")]], width = entry_wid_m))
+                tags$div(class = "pf_rpt_taxtble_div", numericInput(paste0("pf_rpt_taxtble_",curr_pers_id,"_inc_ninc"), label = "net income", value = curr_pers_salary + curr_pers_bonus + curr_pers_other_income - (full_tax$cpp + full_tax$ei + full_tax$fed_tax + full_tax$prov_tax + pspp), min = 0, width = entry_wid_m)),
+                tags$div(class = "pf_rpt_taxtble_div", numericInput(paste0("pf_rpt_taxtble_",curr_pers_id,"_inc_nincm"), label = "net income (monthly)", value = round((curr_pers_salary + curr_pers_bonus + curr_pers_other_income - (full_tax$cpp + full_tax$ei + full_tax$fed_tax + full_tax$prov_tax + pspp))/12,0), min = 0, width = entry_wid_m))
               )
             ),
             column(
-              6,
+              4,
               tags$div(
                 #class = 'block_inner_frame',
                 tags$h5(paste0("Deduction (", tax_year, ")")),
                 tags$div(class = "pf_rpt_taxtble_div", numericInput(paste0("pf_rpt_taxtble_",curr_pers_id,"_dec_cpp"), label = "CPP", value = full_tax$cpp, width = entry_wid_m)),
                 tags$div(class = "pf_rpt_taxtble_div", numericInput(paste0("pf_rpt_taxtble_",curr_pers_id,"_dec_ei"), label = "EI", value = full_tax$ei, width = entry_wid_m)),
                 tags$div(class = "pf_rpt_taxtble_div", numericInput(paste0("pf_rpt_taxtble_",curr_pers_id,"_dec_ftax"), label = "federal income tax", value = full_tax$fed_tax, width = entry_wid_m)),
-                tags$div(class = "pf_rpt_taxtble_div", numericInput(paste0("pf_rpt_taxtble_",curr_pers_id,"_dec_ptax"), label = "provincial income tax", value = full_tax$prov_tax, width = entry_wid_m)),
-                tags$div(class = "pf_rpt_taxtble_div", numericInput(paste0("pf_rpt_taxtble_",curr_pers_id,"_dec_pspp"), label = "employee pension contribution", value = pspp, width = entry_wid_m)),
+                tags$div(class = "pf_rpt_taxtble_div", numericInput(paste0("pf_rpt_taxtble_",curr_pers_id,"_dec_ptax"), label = "prov income tax", value = full_tax$prov_tax, width = entry_wid_m)),
+                tags$div(class = "pf_rpt_taxtble_div", numericInput(paste0("pf_rpt_taxtble_",curr_pers_id,"_dec_pspp"), label = "pension cont", value = pspp, width = entry_wid_m)),
                 tags$div(class = "pf_rpt_taxtble_div", numericInput(paste0("pf_rpt_taxtble_",curr_pers_id,"_dec_tdec"), label = "total deduction", value = full_tax$cpp + full_tax$ei + full_tax$fed_tax + full_tax$prov_tax + pspp, width = entry_wid_m))
+              )
+            ),
+            column(
+              4,
+              tags$div(
+                #class = 'block_inner_frame',
+                tags$h5(paste0("Other (", tax_year, ")")),
+                tags$div(class = "pf_rpt_taxtble_div", numericInput(paste0("pf_rpt_taxtble_",curr_pers_id,"_inc_rrsp"), label = "RRSP cont limit", value = curr_taxpar[[paste0(curr_pers_id, "_rrsp_max_contribution")]], width = entry_wid_m)),
+                tags$div(class = "pf_rpt_taxtble_div", numericInput(paste0("pf_rpt_taxtble_",curr_pers_id,"_inc_tfsa"), label = "TFSA cont limit", value = curr_taxpar[[paste0(curr_pers_id, "_tfsa_max_contribution")]], width = entry_wid_m))
               )
             )
           )
@@ -110,6 +119,9 @@ observe({
       updateNumericInput(session, paste0("pf_rpt_taxtble_",curr_pers_id,"_dec_ptax"), value = full_tax$prov_tax)
       updateNumericInput(session, paste0("pf_rpt_taxtble_",curr_pers_id,"_dec_pspp"), value = pspp)
       updateNumericInput(session, paste0("pf_rpt_taxtble_",curr_pers_id,"_dec_tdec"), value =  full_tax$cpp + full_tax$ei + full_tax$fed_tax + full_tax$prov_tax + pspp)
+      updateNumericInput(session, paste0("pf_rpt_taxtble_",curr_pers_id,"_inc_ninc"), value = curr_pers_salary + curr_pers_bonus + curr_pers_other_income - (full_tax$cpp + full_tax$ei + full_tax$fed_tax + full_tax$prov_tax + pspp))
+      updateNumericInput(session, paste0("pf_rpt_taxtble_",curr_pers_id,"_inc_nincm"), value = round((curr_pers_salary + curr_pers_bonus + curr_pers_other_income - (full_tax$cpp + full_tax$ei + full_tax$fed_tax + full_tax$prov_tax + pspp))/12,0))
+      
     })
     
   })
