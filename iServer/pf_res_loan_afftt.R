@@ -100,8 +100,10 @@ observeEvent(input$pf_res_loan_afftt_ipt_run_test, {
     opt_npv <- 1380000
     opt_dp <- opt_npv - opt_loan
     opt_rb <- opt_ps + opt_cb - opt_dp
-    opt_mrgy_pymt_existing <- 2346
+    opt_mrgy_pymt_existing <- 0
     opt_mrgt_pymt <- cache_loan_mrtg_pymts()[input[[paste0('pf_res_loan_afftt_ipt_', 'new loan')]]]
+    
+    
     ppty_tax_master <- pptytaxr_show() %>%
       dplyr::filter(year == lubridate::year(input$pf_ipt_par_begdt)) %>%
       dplyr::filter(ownership == 'residential') %>%
@@ -191,7 +193,7 @@ observeEvent(input$pf_res_loan_afftt_ipt_run_test, {
                   class = 'pf_res_loan_afftt_opt_div',
                   tags$table(
                     tags$tr(width = "100%",
-                            tags$td(width = "50%", div(style = "", 'new loan mortgage (4.0% I.R.)')),
+                            tags$td(width = "50%", div(style = "", 'new loan mortgage (2.735% I.R.)')),
                             tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_nlm"), label = NULL, value = scales::comma(opt_mrgt_pymt, accuracy = 1))))
                   )
                 ),
