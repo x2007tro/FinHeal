@@ -5,6 +5,7 @@ prelim_data <- reactive({
   withProgress(message = 'Retrieving transaction details ...', {
     prelim_data <- transdata_full() %>% 
       dplyr::filter(property == "n/a") %>% 
+      dplyr::filter(operation_type == 'p') %>% 
       dplyr::mutate(category = ifelse(hyper_category == "Income","Income",hyper_category)) %>% 
       dplyr::mutate(type = ifelse(category == "Income", "Inflow", "Outflow")) 
   })
