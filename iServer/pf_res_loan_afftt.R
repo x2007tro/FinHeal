@@ -94,8 +94,8 @@ observeEvent(input$pf_res_loan_afftt_ipt_run_test, {
     opt_nti <- opt_npi + opt_ri
     
     # loan
-    opt_ps <- sum(ipt_vals[names(ipt_vals) %in% input[[paste0('pf_res_loan_afftt_ipt_', 'property sale')]]])
-    opt_cb <- sum(ipt_vals[names(ipt_vals) %in% input[[paste0('pf_res_loan_afftt_ipt_', 'cash balance')]]])
+    opt_ps <- sum(ipt_vals[names(ipt_vals) %in% input[[paste0('pf_res_loan_afftt_ipt_', 'incoming')]]])
+    opt_cb <- sum(ipt_vals[names(ipt_vals) %in% input[[paste0('pf_res_loan_afftt_ipt_', 'outgoing')]]])
     opt_loan <- sum(ipt_vals[names(ipt_vals) %in% input[[paste0('pf_res_loan_afftt_ipt_', 'new loan')]]])
     opt_npv <- 1380000
     opt_dp <- opt_npv - opt_loan
