@@ -294,7 +294,7 @@ cache_loan_mrtg_pymts <- reactive({
   house_prcs <- meat$default_value[meat$subcategory == 'new loan']/0.8
   ids <- meat$id[meat$subcategory == 'new loan']
   
-  mrtg_tbl <- AmortTableConstr(house_prcs, 0, 0.02735*100, 30)
+  mrtg_tbl <- AmortTableConstr(house_prcs, 0, 0.04*100, 25)
   res <- mrtg_tbl$ft$monthly_payment
   names(res) <- ids
   

@@ -97,19 +97,18 @@ observeEvent(input$pf_res_loan_afftt_ipt_run_test, {
     opt_ps <- sum(ipt_vals[names(ipt_vals) %in% input[[paste0('pf_res_loan_afftt_ipt_', 'incoming')]]])
     opt_cb <- sum(ipt_vals[names(ipt_vals) %in% input[[paste0('pf_res_loan_afftt_ipt_', 'outgoing')]]])
     opt_loan <- sum(ipt_vals[names(ipt_vals) %in% input[[paste0('pf_res_loan_afftt_ipt_', 'new loan')]]])
-    opt_pdp <- 39000 + 10000 # land purchase + security deposit
-    opt_npv <- 350000 + 50000 + 50000 # house + excavation + land
-    opt_odp <- opt_npv - opt_loan - opt_pdp
-    opt_coh <- opt_ps + opt_cb - (1380000 - 900000)# cash balance
+    opt_npv <- 1380000
+    opt_dp <- opt_npv - opt_loan
+    opt_rb <- opt_ps + opt_cb - opt_dp
     opt_mrgy_pymt_existing <- 0
     opt_mrgt_pymt <- cache_loan_mrtg_pymts()[input[[paste0('pf_res_loan_afftt_ipt_', 'new loan')]]]
     
     
     ppty_tax_master <- pptytaxr_show() %>%
       dplyr::filter(year == lubridate::year(input$pf_ipt_par_begdt)) %>%
-      dplyr::filter(ownership == 'residential_owner_occupied') %>%
-      dplyr::filter(province == 'NB') %>%
-      dplyr::filter(area == 'LSD')
+      dplyr::filter(ownership == 'residential') %>%
+      dplyr::filter(province == 'BC') %>%
+      dplyr::filter(area == 'sannich')
     opt_ppty_tax <- opt_npv * ppty_tax_master$tax_rate[1]/12
     opt_ne <- opt_mrgy_pymt_existing + opt_mrgt_pymt + opt_ppty_tax
     
@@ -153,26 +152,19 @@ observeEvent(input$pf_res_loan_afftt_ipt_run_test, {
                   class = 'pf_res_loan_afftt_opt_div',
                   tags$table(
                     tags$tr(width = "100%",
-                            tags$td(width = "50%", div(style = "", 'cash on hand')),
-                            tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_coh"), label = NULL, value = scales::comma(opt_coh, accuracy = 1))))
+                            tags$td(width = "50%", div(style = "", 'reno budget')),
+                            tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_rb"), label = NULL, value = scales::comma(opt_rb, accuracy = 1))))
                   )
                 ),
                 tags$div(
                   class = 'pf_res_loan_afftt_opt_div',
                   tags$table(
                     tags$tr(width = "100%",
-                            tags$td(width = "50%", div(style = "", 'outstanding down payment')),
-                            tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_odp"), label = NULL, value = scales::comma(opt_odp, accuracy = 1))))
+                            tags$td(width = "50%", div(style = "", 'down payment')),
+                            tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_dp"), label = NULL, value = scales::comma(opt_dp, accuracy = 1))))
                   )
                 ),
-                tags$div(
-                  class = 'pf_res_loan_afftt_opt_div',
-                  tags$table(
-                    tags$tr(width = "100%",
-                            tags$td(width = "50%", div(style = "", 'paid down payment')),
-                            tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_pdp"), label = NULL, value = scales::comma(opt_pdp, accuracy = 1))))
-                  )
-                ),
+                
                 tags$div(
                   class = 'pf_res_loan_afftt_opt_div',
                   tags$table(
@@ -193,7 +185,15 @@ observeEvent(input$pf_res_loan_afftt_ipt_run_test, {
                   class = 'pf_res_loan_afftt_opt_div',
                   tags$table(
                     tags$tr(width = "100%",
-                            tags$td(width = "50%", div(style = "", 'new loan mortgage (4% I.R.)')),
+                            tags$td(width = "50%", div(style = "", 'existing loan mortgage (to be ported)')),
+                            tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_nlme"), label = NULL, value = scales::comma(opt_mrgy_pymt_existing, accuracy = 1))))
+                  )
+                ),
+                tags$div(
+                  class = 'pf_res_loan_afftt_opt_div',
+                  tags$table(
+                    tags$tr(width = "100%",
+                            tags$td(width = "50%", div(style = "", 'new loan mortgage (2.735% I.R.)')),
                             tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_nlm"), label = NULL, value = scales::comma(opt_mrgt_pymt, accuracy = 1))))
                   )
                 ),
