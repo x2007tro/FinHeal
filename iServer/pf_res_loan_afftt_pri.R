@@ -97,8 +97,8 @@ observeEvent(input$pf_res_loan_afftt_ipt_run_test, {
     opt_ps <- sum(ipt_vals[names(ipt_vals) %in% input[[paste0('pf_res_loan_afftt_ipt_', 'incoming')]]])
     opt_cb <- sum(ipt_vals[names(ipt_vals) %in% input[[paste0('pf_res_loan_afftt_ipt_', 'outgoing')]]])
     opt_loan <- sum(ipt_vals[names(ipt_vals) %in% input[[paste0('pf_res_loan_afftt_ipt_', 'new loan')]]])
-    opt_npv <- 1380000
-    opt_dp <- opt_npv - opt_loan
+    opt_npv <- 450000
+    opt_dp <- opt_npv - opt_loan - 49000  # down payment already made
     opt_rb <- opt_ps + opt_cb - opt_dp
     opt_mrgy_pymt_existing <- 0
     opt_mrgt_pymt <- cache_loan_mrtg_pymts()[input[[paste0('pf_res_loan_afftt_ipt_', 'new loan')]]]
@@ -106,9 +106,9 @@ observeEvent(input$pf_res_loan_afftt_ipt_run_test, {
     
     ppty_tax_master <- pptytaxr_show() %>%
       dplyr::filter(year == lubridate::year(input$pf_ipt_par_begdt)) %>%
-      dplyr::filter(ownership == 'residential') %>%
-      dplyr::filter(province == 'BC') %>%
-      dplyr::filter(area == 'sannich')
+      dplyr::filter(ownership == 'residential_owner_occupied') %>%
+      dplyr::filter(province == 'NB') %>%
+      dplyr::filter(area == 'LSD')
     opt_ppty_tax <- opt_npv * ppty_tax_master$tax_rate[1]/12
     opt_ne <- opt_mrgy_pymt_existing + opt_mrgt_pymt + opt_ppty_tax
     
@@ -179,14 +179,6 @@ observeEvent(input$pf_res_loan_afftt_ipt_run_test, {
                     tags$tr(width = "100%",
                             tags$td(width = "50%", div(style = "", 'new property market value')),
                             tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_npv"), label = NULL, value = scales::comma(opt_npv, accuracy = 1))))
-                  )
-                ),
-                tags$div(
-                  class = 'pf_res_loan_afftt_opt_div',
-                  tags$table(
-                    tags$tr(width = "100%",
-                            tags$td(width = "50%", div(style = "", 'existing loan mortgage (to be ported)')),
-                            tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_nlme"), label = NULL, value = scales::comma(opt_mrgy_pymt_existing, accuracy = 1))))
                   )
                 ),
                 tags$div(

@@ -61,7 +61,7 @@ mainServer <- function(input, output, session) {
   ##
   # Load input files
   ##
-  source("./iServer/pf_res_loan_afftt.R", local = TRUE)
+  source("./iServer/pf_res_loan_afftt_pri.R", local = TRUE)
   
   ##
   # Load input files
