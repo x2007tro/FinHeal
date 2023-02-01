@@ -98,7 +98,7 @@ observeEvent(input$pf_res_loan_afftt_ipt_run_test, {
     opt_cb <- sum(ipt_vals[names(ipt_vals) %in% input[[paste0('pf_res_loan_afftt_ipt_', 'outgoing')]]])
     opt_loan <- sum(ipt_vals[names(ipt_vals) %in% input[[paste0('pf_res_loan_afftt_ipt_', 'new loan')]]])
     opt_npv <- 39000 + 350000 + 40000 + 15000 # land (paid) + house + excavation (partially paid) + well (paid)
-    opt_dp <- opt_npv - opt_loan - 39000 - 10000 - 16000 - 15000 # down payment already made
+    opt_dp <- opt_npv - opt_loan - 39000 - 10000 - 21000 - 15000 # down payment already made
     opt_rb <- opt_ps + opt_cb - opt_dp
     opt_mrgy_pymt_existing <- 0
     opt_mrgt_pymt <- cache_loan_mrtg_pymts()[input[[paste0('pf_res_loan_afftt_ipt_', 'new loan')]]]
