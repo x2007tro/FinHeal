@@ -170,7 +170,6 @@ observeEvent(input$pf_res_loan_afftt_ipt_run_test, {
                             tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ee_delora"), label = NULL, value = scales::comma(opt_exp_delora, accuracy = 1))))
                   )
                 ),
-                
                 tags$div(
                   class = 'pf_res_loan_afftt_opt_div',
                   tags$table(
@@ -192,7 +191,7 @@ observeEvent(input$pf_res_loan_afftt_ipt_run_test, {
                   tags$table(
                     tags$tr(width = "100%",
                             tags$td(width = "50%", div(style = "", 'total actual expense')),
-                            tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_nlm"), label = NULL, value = scales::comma(opt_ee_actual, accuracy = 1))))
+                            tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ee_tae"), label = NULL, value = scales::comma(opt_ee_actual, accuracy = 1))))
                   )
                 ),
                 tags$div(
@@ -200,7 +199,7 @@ observeEvent(input$pf_res_loan_afftt_ipt_run_test, {
                   tags$table(
                     tags$tr(width = "100%",
                             tags$td(width = "50%", div(style = "", 'total mortgage expense')),
-                            tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_nlpt"), label = NULL, value = scales::comma(opt_ee_bank, accuracy = 1))))
+                            tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ee_tme"), label = NULL, value = scales::comma(opt_ee_bank, accuracy = 1))))
                   )
                 )
               )
