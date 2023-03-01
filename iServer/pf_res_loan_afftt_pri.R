@@ -82,6 +82,7 @@ observeEvent(input$pf_res_loan_afftt_ipt_run_test, {
     tax_rate <- 0.40
     ipt_vals <- lafftt_input_show()$default_value
     names(ipt_vals) <- lafftt_input_show()$id
+    # browser()
     
     # income
     opt_gpi_ann <- sum(ipt_vals[names(ipt_vals) %in% input[[paste0('pf_res_loan_afftt_ipt_', 'personal')]]])
@@ -94,35 +95,40 @@ observeEvent(input$pf_res_loan_afftt_ipt_run_test, {
     opt_nti <- opt_npi + opt_ri
     
     # loan
-    opt_ps <- sum(ipt_vals[names(ipt_vals) %in% input[[paste0('pf_res_loan_afftt_ipt_', 'incoming')]]])
-    opt_cb <- sum(ipt_vals[names(ipt_vals) %in% input[[paste0('pf_res_loan_afftt_ipt_', 'outgoing')]]])
+    opt_ps <- sum(ipt_vals[names(ipt_vals) %in% input[[paste0('pf_res_loan_afftt_ipt_', 'item')]]])
     opt_loan <- sum(ipt_vals[names(ipt_vals) %in% input[[paste0('pf_res_loan_afftt_ipt_', 'new loan')]]])
-    opt_npv <- 39000 + 350000 + 40000 + 15000 # land (paid) + house + excavation (partially paid) + well (paid)
-    opt_dp <- opt_npv - opt_loan - 39000 - 10000 - 40000 - 15000 # down payment already made
-    opt_rb <- opt_ps + opt_cb - opt_dp
+    opt_npv <- opt_loan/0.8
+    opt_dp <- opt_npv - opt_loan
+    opt_rb <- opt_ps
     opt_mrgy_pymt_existing <- 0
     opt_mrgt_pymt <- cache_loan_mrtg_pymts()[input[[paste0('pf_res_loan_afftt_ipt_', 'new loan')]]]
     
-    
     ppty_tax_master <- pptytaxr_show() %>%
       dplyr::filter(year == lubridate::year(input$pf_ipt_par_begdt)) %>%
-      dplyr::filter(ownership == 'residential_owner_occupied') %>%
-      dplyr::filter(province == 'NB') %>%
-      dplyr::filter(area == 'LSD')
+      dplyr::filter(ownership == 'residential') %>%
+      dplyr::filter(province == 'BC') %>%
+      dplyr::filter(area == 'sannich')
     opt_ppty_tax <- opt_npv * ppty_tax_master$tax_rate[1]/12
     opt_ne <- opt_mrgy_pymt_existing + opt_mrgt_pymt + opt_ppty_tax
     
     # old expenses
-    opt_ee <- sum(ipt_vals[names(ipt_vals) %in% input[[paste0('pf_res_loan_afftt_ipt_', 'existing')]]])
-    opt_ee_no_veh <- opt_ee - ipt_vals['expense_existing_car']
-    opt_te <- opt_mrgy_pymt_existing + opt_mrgt_pymt + opt_ppty_tax + opt_ee
-    opt_te_no_veh <- opt_mrgy_pymt_existing + opt_mrgt_pymt + opt_ppty_tax + opt_ee_no_veh
+    opt_exp_stmary <- sum(ipt_vals[names(ipt_vals) %in% input[[paste0('pf_res_loan_afftt_ipt_', 'st mary')]]])
+    opt_exp_delora <- sum(ipt_vals[names(ipt_vals) %in% input[[paste0('pf_res_loan_afftt_ipt_', 'delora')]]])
+    opt_exp_archangel <- sum(ipt_vals[names(ipt_vals) %in% input[[paste0('pf_res_loan_afftt_ipt_', 'archangel')]]])
+    opt_exp_human <- sum(ipt_vals[names(ipt_vals) %in% input[[paste0('pf_res_loan_afftt_ipt_', 'human')]]])
+    opt_ee_actual <- opt_exp_stmary + opt_exp_delora + opt_exp_archangel + opt_exp_human
+    opt_ee_bank <- opt_exp_stmary*0.8 + opt_exp_delora*0.85 + opt_exp_archangel*0.7 + opt_exp_human*0.75
+   
+    # summarize expense
+    opt_te_actual <- opt_mrgy_pymt_existing + opt_mrgt_pymt + opt_ppty_tax + opt_ee_actual
+    opt_te_bank <- opt_mrgy_pymt_existing + opt_mrgt_pymt + opt_ppty_tax + opt_ee_bank
+    #print(opt_te_bank)
     
     # ratio
-    opt_atdsr <- opt_te/opt_gti
-    opt_agdsr <- opt_te_no_veh/opt_gti
-    opt_nsp <- opt_nti - opt_te
-    tres <- c(opt_atdsr, opt_agdsr, opt_nsp)
+    opt_atdsr_actual <- opt_te_actual/opt_gti
+    opt_atdsr_bank <- opt_te_bank/opt_gti
+    opt_nsp <- opt_nti - opt_te_actual
+    tres <- c(opt_atdsr_bank, opt_nsp)
     
     # testing output
     res <- 'pass'
@@ -146,7 +152,63 @@ observeEvent(input$pf_res_loan_afftt_ipt_run_test, {
             column(
               3,
               tagList(
-                tags$h4(class = 'block_title', 'new loan'),
+                tags$h4(class = 'block_title', 'existing expense'),
+                tags$h5(class = 'block_summary', 'property'),
+                tags$div(
+                  class = 'pf_res_loan_afftt_opt_div',
+                  tags$table(
+                    tags$tr(width = "100%",
+                            tags$td(width = "50%", div(style = "", 'st mary')),
+                            tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ee_stb"), label = NULL, value = scales::comma(opt_exp_stmary, accuracy = 1))))
+                  )
+                ),
+                tags$div(
+                  class = 'pf_res_loan_afftt_opt_div',
+                  tags$table(
+                    tags$tr(width = "100%",
+                            tags$td(width = "50%", div(style = "", 'delora')),
+                            tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ee_delora"), label = NULL, value = scales::comma(opt_exp_delora, accuracy = 1))))
+                  )
+                ),
+                
+                tags$div(
+                  class = 'pf_res_loan_afftt_opt_div',
+                  tags$table(
+                    tags$tr(width = "100%",
+                            tags$td(width = "50%", div(style = "", 'archangel')),
+                            tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ee_archangel"), label = NULL, value = scales::comma(opt_exp_archangel, accuracy = 1))))
+                  )
+                ),
+                tags$div(
+                  class = 'pf_res_loan_afftt_opt_div',
+                  tags$table(
+                    tags$tr(width = "100%",
+                            tags$td(width = "50%", div(style = "", 'human')),
+                            tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ee_human"), label = NULL, value = scales::comma(opt_exp_human, accuracy = 1))))
+                  )
+                ),
+                tags$div(
+                  class = 'pf_res_loan_afftt_opt_div',
+                  tags$table(
+                    tags$tr(width = "100%",
+                            tags$td(width = "50%", div(style = "", 'total actual expense')),
+                            tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_nlm"), label = NULL, value = scales::comma(opt_ee_actual, accuracy = 1))))
+                  )
+                ),
+                tags$div(
+                  class = 'pf_res_loan_afftt_opt_div',
+                  tags$table(
+                    tags$tr(width = "100%",
+                            tags$td(width = "50%", div(style = "", 'total mortgage expense')),
+                            tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_nlpt"), label = NULL, value = scales::comma(opt_ee_bank, accuracy = 1))))
+                  )
+                )
+              )
+            ),
+            column(
+              3,
+              tagList(
+                tags$h4(class = 'block_title', 'new loan expense'),
                 tags$h5(class = 'block_summary', 'mortgage and property tax'),
                 tags$div(
                   class = 'pf_res_loan_afftt_opt_div',
@@ -208,7 +270,7 @@ observeEvent(input$pf_res_loan_afftt_ipt_run_test, {
               )
             ),
             column(
-              9,
+              6,
               fluidRow(
                 
                 lapply(1:length(itms), function(i){
@@ -219,7 +281,7 @@ observeEvent(input$pf_res_loan_afftt_ipt_run_test, {
                     tags$h4(class = 'block_title', deps[i]),
                     tags$h5(class = 'block_summary', fmls[i]),
                     
-                    if(itms[i] == 'tdsr'){
+                    if(itms[i] == 'tdsr_bk'){
                       if(tres[itms[i]] <= tgts[i]){
                         res <- c('pass','fail')[1]
                         ab_lbl <- 'btn-success'
@@ -265,7 +327,7 @@ observeEvent(input$pf_res_loan_afftt_ipt_run_test, {
                           tags$table(
                             tags$tr(width = "100%",
                                     tags$td(width = "50%", div(style = "", 'existing expense')),
-                                    tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ee",i), label = NULL, value = scales::comma(opt_ee, accuracy = 1))))
+                                    tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ee",i), label = NULL, value = scales::comma(opt_ee_bank, accuracy = 1))))
                           )
                         ),
                         tags$div(
@@ -273,7 +335,7 @@ observeEvent(input$pf_res_loan_afftt_ipt_run_test, {
                           tags$table(
                             tags$tr(width = "100%",
                                     tags$td(width = "50%", div(style = "", 'total expense')),
-                                    tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_te",i), label = NULL, value = scales::comma(opt_te, accuracy = 1))))
+                                    tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_te",i), label = NULL, value = scales::comma(opt_te_bank, accuracy = 1))))
                           )
                         ), tags$br(),
                         tags$div(
@@ -281,7 +343,7 @@ observeEvent(input$pf_res_loan_afftt_ipt_run_test, {
                           tags$table(
                             tags$tr(width = "100%",
                                     tags$td(width = "50%", div(style = "", 'actual ratio')),
-                                    tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_atdsr",i), label = NULL, value = scales::percent(opt_atdsr))))
+                                    tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_atdsr",i), label = NULL, value = scales::percent(opt_atdsr_bank))))
                           )
                         ),
                         tags$div(
@@ -302,7 +364,7 @@ observeEvent(input$pf_res_loan_afftt_ipt_run_test, {
                         )
                       )
                       
-                    } else if (itms[i] == 'gdsr') {
+                    } else if (itms[i] == 'tdsr_actl') {
                       if(tres[itms[i]] <= tgts[i]){
                         res <- c('pass','fail')[1]
                         ab_lbl <- 'btn-success'
@@ -348,7 +410,7 @@ observeEvent(input$pf_res_loan_afftt_ipt_run_test, {
                           tags$table(
                             tags$tr(width = "100%",
                                     tags$td(width = "50%", div(style = "", 'existing expense (housing)')),
-                                    tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ee",i), label = NULL, value = scales::comma(opt_ee_no_veh, accuracy = 1))))
+                                    tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ee",i), label = NULL, value = scales::comma(opt_ee_actual, accuracy = 1))))
                           )
                         ),
                         tags$div(
@@ -356,7 +418,7 @@ observeEvent(input$pf_res_loan_afftt_ipt_run_test, {
                           tags$table(
                             tags$tr(width = "100%",
                                     tags$td(width = "50%", div(style = "", 'total expense (housing)')),
-                                    tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_te",i), label = NULL, value = scales::comma(opt_te_no_veh, accuracy = 1))))
+                                    tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_te",i), label = NULL, value = scales::comma(opt_te_actual, accuracy = 1))))
                           )
                         ), tags$br(),
                         tags$div(
@@ -364,7 +426,7 @@ observeEvent(input$pf_res_loan_afftt_ipt_run_test, {
                           tags$table(
                             tags$tr(width = "100%",
                                     tags$td(width = "50%", div(style = "", 'actual ratio')),
-                                    tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_agdsr",i), label = NULL, value = scales::percent(opt_agdsr))))
+                                    tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_agdsr",i), label = NULL, value = scales::percent(opt_atdsr_actual))))
                           )
                         ),
                         tags$div(
@@ -431,7 +493,7 @@ observeEvent(input$pf_res_loan_afftt_ipt_run_test, {
                           tags$table(
                             tags$tr(width = "100%",
                                     tags$td(width = "50%", div(style = "", 'existing expense')),
-                                    tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ee",i), label = NULL, value = scales::comma(opt_ee, accuracy = 1))))
+                                    tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ee",i), label = NULL, value = scales::comma(opt_ee_actual, accuracy = 1))))
                           )
                         ),
                         tags$div(
@@ -439,7 +501,7 @@ observeEvent(input$pf_res_loan_afftt_ipt_run_test, {
                           tags$table(
                             tags$tr(width = "100%",
                                     tags$td(width = "50%", div(style = "", 'total expense')),
-                                    tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_te",i), label = NULL, value = scales::comma(opt_te, accuracy = 1))))
+                                    tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_te",i), label = NULL, value = scales::comma(opt_te_actual, accuracy = 1))))
                           )
                         ), tags$br(),
                         tags$div(

@@ -1,6 +1,9 @@
 # render net worth page
 
 output$pr_rpt_pernw_netw <- renderUI({
+  
+  #browser()
+  
   # calculate values
   tmp <- lapply(1:nrow(property_shownact()), function(i){
     
