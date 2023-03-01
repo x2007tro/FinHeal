@@ -2,7 +2,7 @@
 # Global parameter
 ##
 theme_set(theme_light())
-options(scipen = 66666)
+options(scipen = 66666, shiny.maxRequestSize=30*1024^2)
 
 entry_wid_ty <- "50px"
 entry_wid_s <- "105px"
