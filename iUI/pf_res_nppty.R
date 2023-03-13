@@ -1,7 +1,7 @@
 ##
 # tab
 pf_res_nppty_tp <- tabPanel(
-  "Property Acquisition",
+  "Mortgage and Property Tax",
   
   fluidRow(
     column(

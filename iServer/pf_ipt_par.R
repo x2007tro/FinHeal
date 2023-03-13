@@ -267,6 +267,17 @@ lafftt_output_show <- reactive({
   })
 })
 
+pfttst_show <- reactive({
+  
+  withProgress(message = 'Getting transaction details ...', {
+    pfttst_full <- ReadDataFromSS(db_obj, '* Frame 18 : profitability test *')
+    pfttst_show <- pfttst_full %>% 
+      dplyr::filter(show == 1) %>% 
+      dplyr::arrange(order)
+  })
+})
+
+
 pernw_show <- reactive({
   
   withProgress(message = 'Getting transaction details ...', {

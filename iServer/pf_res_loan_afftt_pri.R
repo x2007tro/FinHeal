@@ -1,9 +1,88 @@
 ##
 # tab
+
+output$pf_res_loan_afftt_pfttst <- renderUI({
+  
+  prvs <- unique(pfttst_show()$province)
+  
+  tagList(
+    fluidRow(
+     lapply(1:length(prvs), function(i){
+       itms_per_prv <- pfttst_show() %>% dplyr::filter(province == prvs[i])
+       col_width <- itms_per_prv$column_width[1]
+       
+       column(
+         col_width,
+         
+         fluidRow(
+           column(
+             12,
+             
+             tags$div(
+               class = 'block_inner_frame',
+               
+               tags$h4(class = 'block_title', prvs[i]),  
+                
+               lapply(1:nrow(itms_per_prv), function(j){
+                 
+                 pptyval_j <- itms_per_prv$property_value[j]
+                 lnval_j <- itms_per_prv$loan_value[j]
+                 itrt_j <- itms_per_prv$interest_rate[j]
+                 amrprd_j <- itms_per_prv$amortization_period[j]
+                 ownsip_j <- itms_per_prv$ownership[j]
+                 prv_j <- itms_per_prv$province[j]
+                 area_j <- itms_per_prv$area[j]
+                 
+                 # mortgage payment
+                 mrtg_tbl <- AmortTableConstr(pptyval_j, 0, itrt_j*100, amrprd_j)
+                 mrtg_pymt <- mrtg_tbl$ft$monthly_payment
+                 
+                 # property tax
+                 ppty_tax_master <- pptytaxr_show() %>%
+                   dplyr::filter(year == lubridate::year(input$pf_ipt_par_begdt)) %>%
+                   dplyr::filter(ownership == ownsip_j) %>%
+                   dplyr::filter(province == prv_j) %>%
+                   dplyr::filter(area == area_j)
+                 ppty_tax <- pptyval_j * ppty_tax_master$tax_rate[1]/12
+                 tot_exp <- mrtg_pymt + ppty_tax
+                 
+                 fluidRow(
+                   column(
+                     12,
+                     
+                     tags$div(
+                       tagList(
+                         tags$div(class = "task_div", textInput(paste0("pfttst_",i,"_pptyval",j), label = "property value", value = scales::comma(pptyval_j, accuracy = 1), width = entry_wid_s)),
+                         tags$div(class = "task_div", textInput(paste0("pfttst_",i,"_lnval",j), label = "loan amount", value = scales::comma(lnval_j, accuracy = 1), width = entry_wid_s)),
+                         tags$div(class = "task_div", textInput(paste0("pfttst_",i,"_itrt",j), label = "interest rate", value = scales::percent(itrt_j, accuracy = 0.01), width = entry_wid_s)),
+                         tags$div(class = "task_div", textInput(paste0("pfttst_",i,"_amrprd",j), label = "amortization (yrs)", value = amrprd_j, width = entry_wid_s)),
+                         tags$div(class = "task_div", textInput(paste0("pfttst_",i,"_mtgpymt",j), label = "mortgage", value = scales::comma(mrtg_pymt, accuracy = 1), width = entry_wid_s)),
+                         tags$div(class = "task_div", textInput(paste0("pfttst_",i,"_ppttax",j), label = "property tax", value = scales::comma(ppty_tax, accuracy = 1), width = entry_wid_s)),
+                         tags$div(class = "task_div", textInput(paste0("pfttst_",i,"_totpymt",j), label = "total expense", value = scales::comma(tot_exp, accuracy = 1), width = entry_wid_s))
+                         # add more tag here
+                       )
+                     )
+                   )
+                 )
+                 
+                 
+               })
+               
+             )
+           )
+         )
+       )
+       
+     }) 
+    )
+  )
+  
+})
+
+
 output$pf_res_loan_afftt_ipt <- renderUI({
   
   cats <- unique(lafftt_input_show()$category)
-  
   
   tagList(
     fluidRow(

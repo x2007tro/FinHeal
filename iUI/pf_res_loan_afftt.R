@@ -1,34 +1,66 @@
 ##
 # tab
 pf_res_loan_afftt_tp <- tabPanel(
-  "Loan Afforability",
+  "Property Investment Tools",
   
-  fluidRow(
-    column(
-      12,
+  tabsetPanel(
+    tabPanel(
+      "Profitability Test",
       
-      tags$div(
-        class = 'block_outter_frame',
-        
-        fluidRow(
-          column(
-            12,
+      fluidRow(
+        column(
+          12,
+          
+          tags$div(
+            class = 'block_otter_frame',
             
-            tags$div(
-              class = 'block_inner_frame',
-              uiOutput('pf_res_loan_afftt_ipt')
+            fluidRow(
+              column(
+                12,
+                
+                tags$div(
+                  class = 'block_inner_frame',
+                  
+                  uiOutput('pf_res_loan_afftt_pfttst')
+                )
+              )
             )
-            
-          )
-        ),
-        fluidRow(
-          column(
-            12,
-            uiOutput('pf_res_loan_afftt_opt')
           )
         )
       )
+    ),
+    
+    tabPanel(
+      "Afforability Test",
       
+      fluidRow(
+        column(
+          12,
+          
+          tags$div(
+            class = 'block_outter_frame',
+            
+            fluidRow(
+              column(
+                12,
+                
+                tags$div(
+                  class = 'block_inner_frame',
+                  uiOutput('pf_res_loan_afftt_ipt')
+                )
+                
+              )
+            ),
+            fluidRow(
+              column(
+                12,
+                uiOutput('pf_res_loan_afftt_opt')
+              )
+            )
+          )
+          
+        )
+      )
     )
   )
 

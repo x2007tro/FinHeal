@@ -43,6 +43,9 @@ WriteDataToSS(db_obj, frame_account_tbl, '* Frame 16 : Loan afforability test in
 frame_account_tbl <- readxl::read_excel('./updater/source.xlsx', sheet = 'Frame17 afforability test outpu')
 WriteDataToSS(db_obj, frame_account_tbl, '* Frame 17 : Loan afforability test output *')
 
+frame_account_tbl <- readxl::read_excel('./updater/source.xlsx', sheet = 'Frame18 profitability test')
+WriteDataToSS(db_obj, frame_account_tbl, '* Frame 18 : profitability test *')
+
 frame_account_tbl <- readxl::read_excel('./updater/source.xlsx', sheet = 'frame20 interest rates')
 WriteDataToSS(db_obj, frame_account_tbl, '* Frame 20 : Interest Rates *')
 
