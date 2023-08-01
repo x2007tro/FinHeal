@@ -14,11 +14,11 @@ dashbd_p1_plot_data <- reactive({
     
     data2 <- data1 %>% 
       dplyr::filter(property != "n/a")
-    plot_data2 <- DashbdPlotDataFormat(data2, 'Rental')
+    plot_data2 <- DashbdPlotDataFormat(data2, 'Property')
     
     data3 <- data1 %>% 
       dplyr::filter(property == "n/a")
-    plot_data3 <- DashbdPlotDataFormat(data3, 'All ex. Rental')
+    plot_data3 <- DashbdPlotDataFormat(data3, 'All ex. Property')
     
     plot_data <- rbind.data.frame(plot_data1, plot_data2, plot_data3)
     plot_data
@@ -38,11 +38,11 @@ output$pf_rpt_dashbd_p2 <- renderPlot({
     
     data2 <- data1 %>% 
       dplyr::filter(property != "n/a")
-    plot_data2 <- DashbdPlotDataFormat(data2, 'Rental')
+    plot_data2 <- DashbdPlotDataFormat(data2, 'Property')
     
     data3 <- data1 %>% 
       dplyr::filter(property == "n/a")
-    plot_data3 <- DashbdPlotDataFormat(data3, 'All ex. Rental')
+    plot_data3 <- DashbdPlotDataFormat(data3, 'All ex. Property')
     
     plot_data <- rbind.data.frame(plot_data1, plot_data2, plot_data3)
     
@@ -59,11 +59,11 @@ output$pf_rpt_dashbd_p3 <- renderPlot({
     
     data2 <- data1 %>% 
       dplyr::filter(property != "n/a")
-    plot_data2 <- DashbdPlotDataFormat(data2, 'Rental')
+    plot_data2 <- DashbdPlotDataFormat(data2, 'Property')
     
     data3 <- data1 %>% 
       dplyr::filter(property == "n/a")
-    plot_data3 <- DashbdPlotDataFormat(data3, 'All ex. Rental')
+    plot_data3 <- DashbdPlotDataFormat(data3, 'All ex. Property')
     
     plot_data <- rbind.data.frame(plot_data1, plot_data2, plot_data3)
     
