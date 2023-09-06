@@ -250,7 +250,7 @@ observeEvent(input$pf_res_loan_afftt_ipt_run_test, {
                   class = 'pf_res_loan_afftt_opt_div',
                   tags$table(
                     tags$tr(width = "100%",
-                            tags$td(width = "50%", div(style = "", 'st mary')),
+                            tags$td(width = "50%", div(style = "", 'mcclure')),
                             tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ee_mcclure"), label = NULL, value = scales::comma(opt_exp_mcclure, accuracy = 1))))
                   )
                 ),
@@ -290,7 +290,7 @@ observeEvent(input$pf_res_loan_afftt_ipt_run_test, {
                   class = 'pf_res_loan_afftt_opt_div',
                   tags$table(
                     tags$tr(width = "100%",
-                            tags$td(width = "50%", div(style = "", 'total mortgage expense')),
+                            tags$td(width = "50%", div(style = "", 'total bank recog. expense')),
                             tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ee_tme"), label = NULL, value = scales::comma(opt_ee_bank, accuracy = 1))))
                   )
                 )
