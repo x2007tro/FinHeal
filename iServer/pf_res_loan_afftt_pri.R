@@ -117,7 +117,7 @@ output$pf_res_loan_afftt_ipt <- renderUI({
                     ips_button <- itms_per_subcat$button[1]
                     
                     column(
-                      12/(length(subcats)+1),  # need manual adjustment if length(subcats) is an odd number
+                      floor(12/length(subcats)),  # need manual adjustment if length(subcats) is an odd number
                       
                       if(ips_button == 'checkbox') {
                         checkboxGroupInput(paste0('pf_res_loan_afftt_ipt_', subcats[j]), subcats[j], selected = ips_ids[as.logical(ips_defswt)],
