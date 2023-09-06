@@ -250,6 +250,14 @@ observeEvent(input$pf_res_loan_afftt_ipt_run_test, {
                   class = 'pf_res_loan_afftt_opt_div',
                   tags$table(
                     tags$tr(width = "100%",
+                            tags$td(width = "50%", div(style = "", 'st mary')),
+                            tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ee_mcclure"), label = NULL, value = scales::comma(opt_exp_mcclure, accuracy = 1))))
+                  )
+                ),
+                tags$div(
+                  class = 'pf_res_loan_afftt_opt_div',
+                  tags$table(
+                    tags$tr(width = "100%",
                             tags$td(width = "50%", div(style = "", 'delora')),
                             tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ee_delora"), label = NULL, value = scales::comma(opt_exp_delora, accuracy = 1))))
                   )
