@@ -168,7 +168,7 @@ observeEvent(input$pf_res_loan_afftt_ipt_run_test, {
     opt_gpi <- opt_gpi_ann/12
     opt_npi <- opt_gpi * (1 - tax_rate)
     opt_ri <- sum(ipt_vals[names(ipt_vals) %in% input[[paste0('pf_res_loan_afftt_ipt_', 'rental')]]])
-    ri_rd <- sum(ipt_vals[names(ipt_vals) %in% input[[paste0('pf_res_loan_afftt_ipt_', 'rent inl ratio')]]])
+    ri_rd <- 0.8 # sum(ipt_vals[names(ipt_vals) %in% input[[paste0('pf_res_loan_afftt_ipt_', 'rent inl ratio')]]])
     opt_ri_rd <- opt_ri * ri_rd
     opt_gti <- opt_gpi + opt_ri_rd
     opt_nti <- opt_npi + opt_ri
@@ -192,11 +192,12 @@ observeEvent(input$pf_res_loan_afftt_ipt_run_test, {
     
     # old expenses
     opt_exp_stmary <- sum(ipt_vals[names(ipt_vals) %in% input[[paste0('pf_res_loan_afftt_ipt_', 'st mary')]]])
+    opt_exp_mcclure <- sum(ipt_vals[names(ipt_vals) %in% input[[paste0('pf_res_loan_afftt_ipt_', 'mcclure')]]])
     opt_exp_delora <- sum(ipt_vals[names(ipt_vals) %in% input[[paste0('pf_res_loan_afftt_ipt_', 'delora')]]])
     opt_exp_archangel <- sum(ipt_vals[names(ipt_vals) %in% input[[paste0('pf_res_loan_afftt_ipt_', 'archangel')]]])
     opt_exp_human <- sum(ipt_vals[names(ipt_vals) %in% input[[paste0('pf_res_loan_afftt_ipt_', 'human')]]])
-    opt_ee_actual <- opt_exp_stmary + opt_exp_delora + opt_exp_archangel + opt_exp_human
-    opt_ee_bank <- opt_exp_stmary*0.8 + opt_exp_delora*0.85 + opt_exp_archangel*0.7 + opt_exp_human*0.75
+    opt_ee_actual <- opt_exp_stmary + opt_exp_mcclure + opt_exp_delora + opt_exp_archangel + opt_exp_human
+    opt_ee_bank <- opt_exp_stmary*0.8 + opt_exp_mcclure*0.8 + opt_exp_delora*0.85 + opt_exp_archangel*0.7 + opt_exp_human*0.75
    
     # summarize expense
     opt_te_actual <- opt_mrgy_pymt_existing + opt_mrgt_pymt + opt_ppty_tax + opt_ee_actual
