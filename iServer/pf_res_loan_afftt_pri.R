@@ -417,7 +417,7 @@ observeEvent(input$pf_res_loan_afftt_ipt_run_test, {
                           class = 'pf_res_loan_afftt_opt_div',
                           tags$table(
                             tags$tr(width = "100%",
-                                    tags$td(width = "50%", div(style = "", 'existing expense')),
+                                    tags$td(width = "50%", div(style = "", 'existing bank recog. expense')),
                                     tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ee",i), label = NULL, value = scales::comma(opt_ee_bank, accuracy = 1))))
                           )
                         ),
@@ -583,7 +583,7 @@ observeEvent(input$pf_res_loan_afftt_ipt_run_test, {
                           class = 'pf_res_loan_afftt_opt_div',
                           tags$table(
                             tags$tr(width = "100%",
-                                    tags$td(width = "50%", div(style = "", 'existing expense')),
+                                    tags$td(width = "50%", div(style = "", 'existing actual expense')),
                                     tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ee",i), label = NULL, value = scales::comma(opt_ee_actual, accuracy = 1))))
                           )
                         ),
