@@ -110,7 +110,11 @@ output$pf_res_loan_afftt_ipt <- renderUI({
                     ips_ids <- itms_per_subcat$id
                     ips_names <- itms_per_subcat$item
                     ips_defval <- itms_per_subcat$default_value
-                    ips_used_names <- paste0(ips_names, " ($", scales::comma(ips_defval, accuracy = 1) , ")")
+                    if(subcats[j] == 'new loan'){
+                      ips_used_names <- paste0(ips_names, " ($", scales::comma(ips_defval/1000, accuracy = 1) , "k)")
+                    } else {
+                      ips_used_names <- paste0(ips_names, " ($", scales::comma(ips_defval, accuracy = 1) , ")")
+                    }
                     ips_defswt <- itms_per_subcat$default_switch
                     ips_freq <- itms_per_subcat$freq
                     ips_furp <- itms_per_subcat$further_processing
