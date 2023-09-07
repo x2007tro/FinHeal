@@ -72,19 +72,38 @@ output$pf_rpt_dashbd_p3 <- renderPlot({
   
 })
 
-output$pf_rpt_dashbd_t1 <- DT::renderDataTable({
+output$pf_rpt_dashbd_p4l <- renderPlot({
   withProgress(message = 'Retrieving transaction details ...', {
-    DT::datatable(
-      dashbd_p1_plot_data(),
-      options = list(
-        pageLength = 10,
-        orderClasses = FALSE,
-        searching = TRUE,
-        paging = TRUE
-      )
-    ) %>% 
-      DT::formatRound('value', digits = 0)
-      
+    plot_data <- transdata_full() %>% 
+      dplyr::filter(transaction_date >= input$pf_ipt_par_begdt) %>% 
+      dplyr::filter(transaction_date <= input$pf_ipt_par_enddt) %>% 
+      dplyr::filter(property != 'n/a') %>% 
+      dplyr::mutate(period = paste0(property, " (", operation_type, ")")) %>% 
+      dplyr::mutate(category = ifelse(hyper_category == "Income","Income",ifelse(category == 'Mortgage Principal',"Mortgage Principal","Expense"))) %>% 
+      dplyr::mutate(type = ifelse(category == "Income", "Inflow", "Outflow")) %>% 
+      dplyr::group_by(period, type, category) %>% 
+      dplyr::summarise(value = sum(amount)) %>% 
+      dplyr::filter(value > 0)
+    
+    SummaryPlot(plot_data, legend_pos = 'bottom')
   })
   
 })
+
+output$pf_rpt_dashbd_p4r <- renderPlot({
+  withProgress(message = 'Retrieving transaction details ...', {
+    plot_data <- transdata_full() %>% 
+      dplyr::filter(lubridate::year(transaction_date) == lubridate::year(input$pf_ipt_par_begdt)) %>%
+      dplyr::filter(property != 'n/a') %>% 
+      dplyr::mutate(period = paste0(property, " (", operation_type, ")")) %>% 
+      dplyr::mutate(category = ifelse(hyper_category == "Income","Income",ifelse(category == 'Mortgage Principal',"Mortgage Principal","Expense"))) %>% 
+      dplyr::mutate(type = ifelse(category == "Income", "Inflow", "Outflow")) %>% 
+      dplyr::group_by(period, type, category) %>% 
+      dplyr::summarise(value = sum(amount)) %>% 
+      dplyr::filter(value > 0)
+    
+    SummaryPlot(plot_data, legend_pos = 'bottom')
+  })
+  
+})
+

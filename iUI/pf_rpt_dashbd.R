@@ -12,7 +12,7 @@ pf_rpt_dashbd_tp <- tabPanel(
         
         fluidRow(
           column(
-            6,
+            4,
             tags$div(
               class = 'block_inner_frame',
               tags$h4(class = 'block_title', "Report Month"),
@@ -21,34 +21,42 @@ pf_rpt_dashbd_tp <- tabPanel(
           ),
           
           column(
-            6,
+            4,
             tags$div(
               class = 'block_inner_frame',
               tags$h4(class = 'block_title', "Report Year"),
               plotOutput("pf_rpt_dashbd_p2")
             )
-            
+          ),
+          
+          column(
+            4,
+            tags$div(
+              class = 'block_inner_frame',
+              tags$h4(class = 'block_title', "Year by Year"),
+              plotOutput("pf_rpt_dashbd_p3")
+            )
           )
+          
         ),
+        
         fluidRow(
           column(
             6,
             tags$div(
               class = 'block_inner_frame',
               tags$h4(class = 'block_title', "Report Month"),
-              tags$div(
-                class = 'dt_table',
-                DT::dataTableOutput("pf_rpt_dashbd_t1")
-              ) 
+              plotOutput("pf_rpt_dashbd_p4l")
             )
+            
           ),
           
           column(
             6,
             tags$div(
               class = 'block_inner_frame',
-              tags$h4(class = 'block_title', "Previous Year"),
-              plotOutput("pf_rpt_dashbd_p3")
+              tags$h4(class = 'block_title', "Report Year"),
+              plotOutput("pf_rpt_dashbd_p4r")
             )
             
           )
