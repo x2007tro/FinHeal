@@ -33,7 +33,7 @@ pf_rpt_dashbd_tp <- tabPanel(
             4,
             tags$div(
               class = 'block_inner_frame',
-              tags$h4(class = 'block_title', "Year by Year"),
+              tags$h4(class = 'block_title', "Previous Year"),
               plotOutput("pf_rpt_dashbd_p3")
             )
           )
