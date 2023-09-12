@@ -292,8 +292,7 @@ pernw_hist_show <- reactive({
   withProgress(message = 'Getting transaction details ...', {
     pernw_hist_full <- ReadDataFromSS(db_obj, '* Output 10 : Net Worth History *')
     pernw_hist_show <- pernw_hist_full %>% 
-      dplyr::filter(active == 1 & show == 1) %>% 
-      dplyr::arrange(datadate)
+      dplyr::filter(active == 1 & show == 1) 
   })
   
 })
