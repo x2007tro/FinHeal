@@ -92,6 +92,18 @@ pr_rpt_pernw_tp <- tabPanel(
               
             )
           )
+        ),
+        
+        fluidRow(
+          column(
+            12,
+            
+            tags$div(
+              class = 'block_inner_frame',
+              tags$h4(class = 'block_title', 'Networth'),
+              plotOutput('pr_rpt_pernw_hist')
+            )
+          )
         )
         
       )

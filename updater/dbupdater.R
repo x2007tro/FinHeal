@@ -49,8 +49,8 @@ WriteDataToSS(db_obj, frame_account_tbl, '* Frame 18 : profitability test *')
 frame_account_tbl <- readxl::read_excel('./updater/source.xlsx', sheet = 'frame20 interest rates')
 WriteDataToSS(db_obj, frame_account_tbl, '* Frame 20 : Interest Rates *')
 
-frame_account_tbl <- readxl::read_excel('./updater/source.xlsx', sheet = 'input02 transactions')
-WriteDataToSS(db_obj, frame_account_tbl, '* Input 02 : Transactions *')
+#frame_account_tbl <- readxl::read_excel('./updater/source.xlsx', sheet = 'input02 transactions')
+#WriteDataToSS(db_obj, frame_account_tbl, '* Input 02 : Transactions *')
 
 frame_account_tbl <- readxl::read_excel('./updater/source.xlsx', sheet = 'input05 personal')
 WriteDataToSS(db_obj, frame_account_tbl, '* Input 05 : Demographics *')
@@ -69,3 +69,6 @@ WriteDataToSS(db_obj, frame_account_tbl, '* Input 10 : Autocat *')
 
 frame_account_tbl <- readxl::read_excel('./updater/source.xlsx', sheet = 'input52 buz exp')
 WriteDataToSS(db_obj, frame_account_tbl, '* Input 52 : Business Expense *')
+
+frame_account_tbl <- readxl::read_excel('./updater/source.xlsx', sheet = 'output10 personal nw hist')
+WriteDataToSS(db_obj, frame_account_tbl, '* Output 10 : Net Worth History *')

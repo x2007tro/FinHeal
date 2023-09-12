@@ -40,6 +40,20 @@ output$pr_rpt_pernw_netw <- renderUI({
   
   tot_assets <- ppty_val + land_val + assets_val
   tot_liabs <- liabs_val
+  tot_nw <- tot_assets - tot_liabs
+  
+  nw_hist <- data.frame(
+    datadate = Sys.Date(),
+    asset = tot_assets,
+    liability = -tot_liabs,
+    networth = tot_nw,
+    active = 1,
+    order = 999,
+    show = 1,
+    entry_datetime = Sys.time(),
+    comments = paste0("Net worth (", tot_nw, ") = assets (", tot_assets, ") - liability (", tot_liabs, ")")
+  )
+  WriteDataToSS(db_obj, nw_hist, '* Output 10 : Net Worth History *', TRUE)
   
   aadate <- max(pernw_show()$as_at_date, input$pf_ipt_par_enddt)
   
@@ -47,7 +61,7 @@ output$pr_rpt_pernw_netw <- renderUI({
     fluidRow(
       column(
         12,
-        tags$div(class = "pr_rpt_pernw_div", tags$h5(tags$b(paste0('OF $', scales::comma(tot_assets - tot_liabs, accuracy = 1))))),
+        tags$div(class = "pr_rpt_pernw_div", tags$h5(tags$b(paste0('OF $', scales::comma(tot_nw, accuracy = 1))))),
         tags$div(
           class = 'pr_rpt_pernw_div',
           tags$table(
@@ -241,5 +255,12 @@ output$pr_rpt_pernw_liab <- renderUI({
     })
     
   )
+})
+
+output$pr_rpt_pernw_hist <- renderPlot({
+  
+  plot_data <- pernw_hist_show() 
+  SummaryPlot(plot_data, legend_pos = 'bottom')
+  
 })
 
