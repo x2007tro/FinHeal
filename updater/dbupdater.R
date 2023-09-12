@@ -70,5 +70,5 @@ WriteDataToSS(db_obj, frame_account_tbl, '* Input 10 : Autocat *')
 frame_account_tbl <- readxl::read_excel('./updater/source.xlsx', sheet = 'input52 buz exp')
 WriteDataToSS(db_obj, frame_account_tbl, '* Input 52 : Business Expense *')
 
-frame_account_tbl <- readxl::read_excel('./updater/source.xlsx', sheet = 'output10 personal nw hist')
-WriteDataToSS(db_obj, frame_account_tbl, '* Output 10 : Net Worth History *')
+#frame_account_tbl <- readxl::read_excel('./updater/source.xlsx', sheet = 'output10 personal nw hist')
+#WriteDataToSS(db_obj, frame_account_tbl, '* Output 10 : Net Worth History *')
