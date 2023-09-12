@@ -27,7 +27,7 @@ observe({
         dplyr::filter(hyper_category != 'Income') %>% 
         dplyr::group_by(category) %>% 
         dplyr::summarise(value = round(sum(amount))) %>% 
-        dplyr::filter(value > 0) %>% 
+        dplyr::filter(value >= 0) %>% 
         dplyr::arrange(value)
     })
     head(breakdown_data_cy)
@@ -40,7 +40,7 @@ observe({
         dplyr::mutate(type = ifelse(category == "Income", "Inflow", "Outflow")) %>% 
         dplyr::group_by(period, type, category) %>% 
         dplyr::summarise(value = sum(amount)) %>% 
-        dplyr::filter(value > 0)
+        dplyr::filter(value >= 0)
     })
     
     output[[paste0("pf_rpt_rntsumm_", property_show()$id[i])]] <- renderUI({
@@ -161,20 +161,20 @@ observe({
       })
     })
     
-    # output[[paste0("pf_rpt_rntsumm_", curr_ppty_id, "_plot1")]] <- renderPlot({
-    #   withProgress(message = 'Retrieving transaction details ...', {
-    #     ExpCatPlot(breakdown_data_cy, c('pie','treemap')[2])
-    #   })
-    #   
-    # })
-    # 
-    # output[[paste0("pf_rpt_rntsumm_", curr_ppty_id, "_plot2")]] <- renderPlot({
-    #   withProgress(message = 'Retrieving transaction details ...', {
-    #     SummaryPlot(summ_data_ay, 0)
-    #   })
-    #   
-    # })
-    # 
+    output[[paste0("pf_rpt_rntsumm_", curr_ppty_id, "_plot1")]] <- renderPlot({
+      withProgress(message = 'Retrieving transaction details ...', {
+        ExpCatPlot(breakdown_data_cy, c('pie','treemap')[2])
+      })
+
+    })
+
+    output[[paste0("pf_rpt_rntsumm_", curr_ppty_id, "_plot2")]] <- renderPlot({
+      withProgress(message = 'Retrieving transaction details ...', {
+        SummaryPlot(summ_data_ay, 0)
+      })
+
+    })
+
   })
 })
 
