@@ -161,20 +161,20 @@ observe({
       })
     })
     
-    output[[paste0("pf_rpt_rntsumm_", curr_ppty_id, "_plot1")]] <- renderPlot({
-      withProgress(message = 'Retrieving transaction details ...', {
-        ExpCatPlot(breakdown_data_cy, c('pie','treemap')[2])
-      })
-      
-    })
-    
-    output[[paste0("pf_rpt_rntsumm_", curr_ppty_id, "_plot2")]] <- renderPlot({
-      withProgress(message = 'Retrieving transaction details ...', {
-        SummaryPlot(summ_data_ay, 0)
-      })
-      
-    })
-    
+    # output[[paste0("pf_rpt_rntsumm_", curr_ppty_id, "_plot1")]] <- renderPlot({
+    #   withProgress(message = 'Retrieving transaction details ...', {
+    #     ExpCatPlot(breakdown_data_cy, c('pie','treemap')[2])
+    #   })
+    #   
+    # })
+    # 
+    # output[[paste0("pf_rpt_rntsumm_", curr_ppty_id, "_plot2")]] <- renderPlot({
+    #   withProgress(message = 'Retrieving transaction details ...', {
+    #     SummaryPlot(summ_data_ay, 0)
+    #   })
+    #   
+    # })
+    # 
   })
 })
 
