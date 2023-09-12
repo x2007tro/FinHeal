@@ -1,7 +1,7 @@
 ##
 # tab
 pf_rpt_expsumm_tp <- tabPanel(
-  "Expense",
+  "Non-Property Expense",
   
   tabsetPanel(
     tabPanel(

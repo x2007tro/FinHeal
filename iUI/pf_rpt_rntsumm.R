@@ -1,7 +1,7 @@
 ##
 # tab
 pf_rpt_rntsumm_tp <- tabPanel(
-  "Property",
+  "Property Expense",
   
   fluidRow(
     column(
