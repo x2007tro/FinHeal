@@ -259,7 +259,15 @@ output$pr_rpt_pernw_liab <- renderUI({
 
 output$pr_rpt_pernw_hist <- renderPlot({
   
-  plot_data <- pernw_hist_show() 
+  plot_data <- pernw_hist_show() %>% 
+    dplyr::filter(active == 1 & show == 1) %>% 
+    dplyr::arrange(datadate) %>% 
+    dplyr::mutate(period = lubridate::year(datadate), type = paste0(lubridate::month(datadate))) %>% 
+    dplyr::group_by(period, type) %>% 
+    dplyr::filter(entry_datetime == max(entry_datetime)) %>% 
+    dplyr::select(period, type, asset, liability, networth) %>% 
+    tidyr::gather('category', 'value', -period, -type)
+  
   SummaryPlot(plot_data, legend_pos = 'bottom')
   
 })

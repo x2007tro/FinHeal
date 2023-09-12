@@ -100,7 +100,7 @@ pr_rpt_pernw_tp <- tabPanel(
             
             tags$div(
               class = 'block_inner_frame',
-              tags$h4(class = 'block_title', 'Networth'),
+              tags$h4(class = 'block_title', 'Net Worth Curve'),
               plotOutput('pr_rpt_pernw_hist')
             )
           )

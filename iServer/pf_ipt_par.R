@@ -293,12 +293,7 @@ pernw_hist_show <- reactive({
     pernw_hist_full <- ReadDataFromSS(db_obj, '* Output 10 : Net Worth History *')
     pernw_hist_show <- pernw_hist_full %>% 
       dplyr::filter(active == 1 & show == 1) %>% 
-      dplyr::arrange(datadate) %>% 
-      dplyr::mutate(period = lubridate::year(datadate), type = lubridate::month(datadate)) %>% 
-      dplyr::group_by(period, type) %>% 
-      dplyr::filter(entry_datetime == max(entry_datetime)) %>% 
-      dplyr::select(period, type, asset, liability, networth) %>% 
-      tidyr::gather('category', 'value', -period, -type)
+      dplyr::arrange(datadate)
   })
   
 })
