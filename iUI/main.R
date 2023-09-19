@@ -7,7 +7,6 @@ ui_files <- c('pf_rpt_pernw','pf_rpt_dashbd','pf_rpt_expsumm','pf_rpt_rntsumm','
               'pf_dat_exp',
               'pf_res_nppty',
               'pf_res_loan_afftt',
-              
               'bz_ipt_par','bz_rpt_exp4buz')
 lapply(ui_files, function(f){
   source(paste0("./iUI/", f, ".R"), local = FALSE)

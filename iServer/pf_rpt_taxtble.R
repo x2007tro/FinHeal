@@ -66,7 +66,8 @@ observe({
                 tags$div(class = "pf_rpt_taxtble_div", numericInput(paste0("pf_rpt_taxtble_",curr_pers_id,"_inc_bos"), label = "bonus", value = curr_pers_bonus, min = 0, width = entry_wid_m)),
                 tags$div(class = "pf_rpt_taxtble_div", numericInput(paste0("pf_rpt_taxtble_",curr_pers_id,"_inc_oin"), label = "other income", value = curr_pers_other_income, min = 0, width = entry_wid_m)),
                 tags$div(class = "pf_rpt_taxtble_div", numericInput(paste0("pf_rpt_taxtble_",curr_pers_id,"_inc_off"), label = "offset income", value = 0, min = 0, width = entry_wid_m)),
-                tags$div(class = "pf_rpt_taxtble_div", numericInput(paste0("pf_rpt_taxtble_",curr_pers_id,"_inc_ninc"), label = "net income", value = curr_pers_other_income - (full_tax$cpp + full_tax$ei + full_tax$fed_tax + full_tax$prov_tax + pspp), min = 0, width = entry_wid_m)),
+                tags$div(class = "pf_rpt_taxtble_div", numericInput(paste0("pf_rpt_taxtble_",curr_pers_id,"_inc_off"), label = "gross income", value = curr_pers_total_income, min = 0, width = entry_wid_m)),
+                tags$div(class = "pf_rpt_taxtble_div", numericInput(paste0("pf_rpt_taxtble_",curr_pers_id,"_inc_ninc"), label = "net income", value = curr_pers_total_income - (full_tax$cpp + full_tax$ei + full_tax$fed_tax + full_tax$prov_tax + pspp), min = 0, width = entry_wid_m)),
                 tags$div(class = "pf_rpt_taxtble_div", numericInput(paste0("pf_rpt_taxtble_",curr_pers_id,"_inc_nincm"), label = "net income (monthly)", value = round((curr_pers_total_income - (full_tax$cpp + full_tax$ei + full_tax$fed_tax + full_tax$prov_tax + pspp))/12,0), min = 0, width = entry_wid_m))
               )
             ),

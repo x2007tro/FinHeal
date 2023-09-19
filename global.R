@@ -17,7 +17,8 @@ get_palette <- colorRampPalette(RColorBrewer::brewer.pal(8, name = 'Pastel1'))
 # connection for database
 #
 db_obj <- list(
-  srv = "192.168.2.200",
+  #srv = "192.168.2.200",
+  srv = "10.0.0.200",
   prt = 3307,
   dbn = "FinHeal",
   id = "dspeast2",
