@@ -101,7 +101,7 @@ observe({
                           column(
                             12,
                             tags$h4(class = 'block_title', "Expense"),
-                            tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_exp_pptytax"), label = "property tax", value = curr_pptytax$amount, width = entry_wid_l)),
+                            tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_exp_pptytax"), label = "property tax", value = curr_pptytax$amount*0, width = entry_wid_l)),
                             tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_exp_util"), label = "utility", value = 0, width = entry_wid_l)),
                             tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_exp_insu"), label = "insurance", value = property_shownact()$exp_insurance[i], width = entry_wid_l)),
                             tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_exp_watnsew"), label = "water & sewer", value = 0, width = entry_wid_l)),
