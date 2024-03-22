@@ -26,3 +26,5 @@ db_obj <- list(
 )
 
 tasks <- list(100)
+
+PreprocessingTrans()

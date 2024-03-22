@@ -35,7 +35,7 @@ accounts_show <- reactive({
     accounts_show <- accounts_full %>% 
       dplyr::filter(show == 1) %>% 
       dplyr::arrange(order) %>% 
-      dplyr::select(id, name)
+      dplyr::select(id, name, description)
   })
 })
 

@@ -198,3 +198,49 @@ AmortTableConstr <- function(
   tmp2 <- dplyr::bind_rows(lapply(res,"[[",2))
   return(list(ft = tmp1, st = tmp2))
 }
+
+##
+# Preprocess bank transactions files Post-mint area
+PreprocessingTrans <- function(){
+  
+  # Pre-process BMO Chequing
+  bmo_operating_fl <- 'preprocessing/input/statement.csv'
+  
+  bmo_operating_prelim <- read.csv(bmo_operating_fl, header = F, skip = 6, stringsAsFactors = F)
+  colnames(bmo_operating_prelim) <- c('FirstBankCard', 'Transaction Type', 'Date', 'Amount', 'Description')
+  bmo_operating_final <- bmo_operating_prelim %>% 
+    dplyr::mutate(Date = format(as.Date(as.character(Date), format = '%Y%m%d'), '%Y-%m-%d'), Amount = abs(Amount)) %>% 
+    dplyr::mutate(Category = 'Misc Expenses', `Account Name` = 'BMO Operating') %>% 
+    dplyr::select(Date, `Transaction Type`, Description, Amount, Category, `Account Name`)
+  
+  # Pre-process CIBC Chequing
+  cibc_operating_fl <- 'preprocessing/input/cibc.csv'
+  
+  cibc_operating_prelim <- read.csv(cibc_operating_fl, header = F, skip = 0, stringsAsFactors = F)
+  colnames(cibc_operating_prelim) <- c('Date', 'Description', 'Debt', 'Credit')
+  cibc_operating_final <- cibc_operating_prelim %>% 
+    dplyr::mutate(Amount = ifelse(is.na(Credit), Debt, Credit)) %>% 
+    dplyr::mutate(`Transaction Type` = ifelse(is.na(Credit), 'DEBIT', 'CREDIT')) %>% 
+    dplyr::mutate(Category = 'Misc Expenses', `Account Name` = 'CIBC Operating') %>% 
+    dplyr::select(Date, `Transaction Type`, Description, Amount, Category, `Account Name`)
+  
+  # Pre-process CIBC Chequing
+  cibc_aiptl_fl <- 'preprocessing/input/cibc (1).csv'
+  
+  cibc_aiptl_prelim <- read.csv(cibc_aiptl_fl, header = F, skip = 0, stringsAsFactors = F)
+  colnames(cibc_aiptl_prelim) <- c('Date', 'Description', 'Debt', 'Credit', 'ignore')
+  cibc_aiptl_final <- cibc_aiptl_prelim %>% 
+    dplyr::mutate(Amount = ifelse(is.na(Credit), Debt, Credit)) %>% 
+    dplyr::mutate(`Transaction Type` = ifelse(is.na(Credit), 'DEBIT', 'CREDIT')) %>% 
+    dplyr::mutate(Category = 'Misc Expenses', `Account Name` = 'CIBC AIP Visa Tong Li') %>% 
+    dplyr::select(Date, `Transaction Type`, Description, Amount, Category, `Account Name`)
+  
+  # master file
+  master_file <- dplyr::bind_rows(
+    list(bmo_operating_final, cibc_operating_final, cibc_aiptl_final)
+  )
+  
+  write.csv(master_file, 
+            file = paste0('preprocessing/output/transactions-', format(Sys.Date(), '%Y%m%d'),'.csv'),
+            row.names = F)
+}

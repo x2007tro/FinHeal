@@ -20,6 +20,7 @@ observe({
     
     curr_acct_id <- accounts_show()$id[i]
     curr_acct_nm <- accounts_show()$name[i]
+    curr_acct_desp <- accounts_show()$descrption[i]
     
     output[[curr_acct_id]] <- renderUI({
       
@@ -39,14 +40,17 @@ observe({
         )
         
         temp <- df %>%
-          dplyr::mutate(Date = as.Date(Date, format = '%Y-%m-%d')) %>% 
+          dplyr::mutate(Date = as.Date(Transaction.Date, format='%m/%d/%y')) %>% 
           dplyr::filter(Date >= input$pf_ipt_par_begdt) %>% 
           dplyr::filter(Date <= input$pf_ipt_par_enddt) %>% 
-          dplyr::filter(Account.Name == curr_acct_nm) %>% 
-          dplyr::mutate(NewAmount = ifelse(Transaction.Type == 'DEBIT', Amount, -Amount)) %>% 
-          dplyr::select('Date','Description','NewAmount','Category','Account.Name') %>% 
+          dplyr::filter(Account.Group == 'Income' & Account.Group == 'Expense') %>% 
+          dplyr::filter(Other.Accounts.for.this.Transaction == curr_acct_desp) %>% 
+          dplyr::mutate(NewAmount = ifelse(Account.Group == 'Expense', Amount.(One.column), -Amount.(One.column))) %>% 
+          dplyr::mutate(category = Account.name) %>% 
+          dplyr::mutate(Account.Name = curr_acct_nm) %>% 
+          dplyr::select('Transaction.Date','Transaction.Description','NewAmount','category','Account.Name') %>% 
           dplyr::mutate(recurring = FALSE, property = 'n/a', operation_type = 'p', data_table = dattbl_show()$name[1]) %>% 
-          dplyr::rename(date = Date, description = Description, amount = NewAmount, category = Category, account = Account.Name)
+          dplyr::rename(date = Transaction.Date, description = Transaction.Description, amount = NewAmount, account = Account.Name)
         
         ##
         # Pre-processing some expense categories to each table
@@ -60,7 +64,7 @@ observe({
             dplyr::mutate(amount = ifelse(grepl(autocat_show()$string[z], description, ignore.case = TRUE), autocat_show()$multiplier[z]*amount, amount))
         }
         
-        tasks[[i]] <<- temp %>% dplyr::arrange(description, category)
+        tasks[[i]] <<- temp %>% dplyr::arrange(category)
         
         tagList(
           fluidRow(
