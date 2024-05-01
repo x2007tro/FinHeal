@@ -11,7 +11,7 @@ source('http://faculty.ucr.edu/~tgirke/Documents/R_BioCond/My_R_Scripts/mortgage
 
 ##
 # Source server and ui components
-##
+##kmpka
 source("helper/dbhelper.R")
 source("helper/utility.R")
 source("global.R", local = FALSE)

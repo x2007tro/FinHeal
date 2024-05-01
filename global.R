@@ -27,4 +27,7 @@ db_obj <- list(
 
 tasks <- list(100)
 
-PreprocessingTrans()
+if(.Platform$OS.type == 'windows'){
+  PreprocessingTrans()  
+}
+
