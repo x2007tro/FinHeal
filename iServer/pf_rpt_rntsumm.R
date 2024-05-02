@@ -20,15 +20,17 @@ observe({
     curr_ppty_ot <- property_show()$operation_type[i]
     
     withProgress(message = 'Retrieving transaction details ...', {
+      #browser()
       breakdown_data_cy <- transdata_full() %>% 
         dplyr::filter(property == curr_ppty_nm & operation_type == curr_ppty_ot) %>%
         dplyr::filter(lubridate::year(transaction_date) == lubridate::year(input$pf_ipt_par_begdt)) %>% 
         #dplyr::filter(transaction_date <= input$pf_ipt_par_enddt) %>% 
-        dplyr::filter(hyper_category != 'Income') %>% 
-        dplyr::group_by(category) %>% 
+        dplyr::filter(hyper_category != 'Income') %>%
+        dplyr::group_by(description) %>% 
         dplyr::summarise(value = round(sum(amount))) %>% 
-        dplyr::filter(value >= 0) %>% 
-        dplyr::arrange(value)
+        dplyr::filter(value > 0) %>% 
+        dplyr::rename(category = description) %>% 
+        dplyr::arrange(desc(value))
     })
     head(breakdown_data_cy)
     
@@ -142,7 +144,7 @@ observe({
                     tags$div(
                       class = 'block_inner_frame',
                       tags$h4(class = 'block_title', "Current Year Breakdown"),
-                      plotOutput(paste0("pf_rpt_rntsumm_", curr_ppty_id, "_plot1"))
+                      DT::dataTableOutput(paste0("pf_rpt_rntsumm_", curr_ppty_id, "_plot1"))
                     )
                   ),
                   column(
@@ -161,10 +163,22 @@ observe({
       })
     })
     
-    output[[paste0("pf_rpt_rntsumm_", curr_ppty_id, "_plot1")]] <- renderPlot({
-      withProgress(message = 'Retrieving transaction details ...', {
-        ExpCatPlot(breakdown_data_cy, c('pie','treemap')[2])
-      })
+    output[[paste0("pf_rpt_rntsumm_", curr_ppty_id, "_plot1")]] <- DT::renderDataTable({
+      ## Colour and values for table colour formatting
+      brks <- seq(0, 100000, 500)
+      clrs <- colorRampPalette(c("white", "#a70000"))(length(brks) + 1)
+      
+      DT::datatable(
+        breakdown_data_cy,
+        options = list(
+            pageLength = 10,
+            orderClasses = FALSE,
+            searching = TRUE,
+            paging = TRUE
+            )
+      ) %>%
+      DT::formatCurrency("value", digits = 0) %>% 
+      DT::formatStyle("value", backgroundColor = styleInterval(brks, clrs))
 
     })
 
