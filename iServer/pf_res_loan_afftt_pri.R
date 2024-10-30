@@ -181,7 +181,7 @@ observeEvent(input$pf_res_loan_afftt_ipt_run_test, {
     opt_ps <- sum(ipt_vals[names(ipt_vals) %in% input[[paste0('pf_res_loan_afftt_ipt_', 'item')]]])
     opt_loan <- sum(ipt_vals[names(ipt_vals) %in% input[[paste0('pf_res_loan_afftt_ipt_', 'new loan')]]])
     opt_npv <- opt_loan/0.8
-    opt_dp <- opt_npv - opt_loan + 25000 # + land transfer tax + lawyer expense
+    opt_dp <- opt_npv - opt_loan + 30000 # + land transfer tax + lawyer expense
     opt_rb <- opt_ps
     opt_mrgy_pymt_existing <- 0
     opt_mrgt_pymt <- cache_loan_mrtg_pymts()[input[[paste0('pf_res_loan_afftt_ipt_', 'new loan')]]]
@@ -197,11 +197,12 @@ observeEvent(input$pf_res_loan_afftt_ipt_run_test, {
     # old expenses
     opt_exp_stmary <- sum(ipt_vals[names(ipt_vals) %in% input[[paste0('pf_res_loan_afftt_ipt_', 'st mary')]]])
     opt_exp_mcclure <- sum(ipt_vals[names(ipt_vals) %in% input[[paste0('pf_res_loan_afftt_ipt_', 'mcclure')]]])
+    opt_exp_cherrilee <- sum(ipt_vals[names(ipt_vals) %in% input[[paste0('pf_res_loan_afftt_ipt_', 'cherrilee')]]])
     opt_exp_delora <- sum(ipt_vals[names(ipt_vals) %in% input[[paste0('pf_res_loan_afftt_ipt_', 'delora')]]])
     opt_exp_archangel <- sum(ipt_vals[names(ipt_vals) %in% input[[paste0('pf_res_loan_afftt_ipt_', 'archangel')]]])
     opt_exp_human <- sum(ipt_vals[names(ipt_vals) %in% input[[paste0('pf_res_loan_afftt_ipt_', 'human')]]])
-    opt_ee_actual <- opt_exp_stmary + opt_exp_mcclure + opt_exp_delora + opt_exp_archangel + opt_exp_human
-    opt_ee_bank <- opt_exp_stmary*0.8 + opt_exp_mcclure*0.8 + opt_exp_delora*0.85 + opt_exp_archangel*0.7 + opt_exp_human*0.75
+    opt_ee_actual <- opt_exp_stmary + opt_exp_mcclure + opt_exp_cherrilee + opt_exp_delora + opt_exp_archangel + opt_exp_human
+    opt_ee_bank <- opt_exp_stmary*0.8 + opt_exp_mcclure*0.8 + opt_exp_cherrilee*0.85 + opt_exp_delora*0.85 + opt_exp_archangel*0.7 + opt_exp_human*0.75
    
     # summarize expense
     opt_te_actual <- opt_mrgy_pymt_existing + opt_mrgt_pymt + opt_ppty_tax + opt_ee_actual
@@ -252,6 +253,14 @@ observeEvent(input$pf_res_loan_afftt_ipt_run_test, {
                     tags$tr(width = "100%",
                             tags$td(width = "50%", div(style = "", 'mcclure')),
                             tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ee_mcclure"), label = NULL, value = scales::comma(opt_exp_mcclure, accuracy = 1))))
+                  )
+                ),
+                tags$div(
+                  class = 'pf_res_loan_afftt_opt_div',
+                  tags$table(
+                    tags$tr(width = "100%",
+                            tags$td(width = "50%", div(style = "", 'cherrilee')),
+                            tags$td(width = "50%", textInput(paste0("pf_res_loan_afftt_opt_ee_cherrilee"), label = NULL, value = scales::comma(opt_exp_cherrilee, accuracy = 1))))
                   )
                 ),
                 tags$div(
