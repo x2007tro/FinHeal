@@ -117,12 +117,12 @@ observe({
                           column(
                             12,
                             tags$h4(class = 'block_title', "Additional"),
-                            tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_1"), label = "banking fee", value = 0, width = entry_wid_l)),
-                            tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_2"), label = "rent reimburse", value = 0, width = entry_wid_l)),
-                            tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_3"), label = "labor", value = 0, width = entry_wid_l)),
-                            tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_4"), label = "equipment", value = 0, width = entry_wid_l)),
-                            tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_5"), label = "upgrades", value = 0, width = entry_wid_l)),
-                            tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_6"), label = "reserved", value = 0, width = entry_wid_l))
+                            tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_bkfee"), label = "banking fee", value = 0, width = entry_wid_l)),
+                            tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_rr"), label = "rent reimburse", value = 0, width = entry_wid_l)),
+                            tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_labor"), label = "labor", value = 0, width = entry_wid_l)),
+                            tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_eqp"), label = "equipment", value = 0, width = entry_wid_l)),
+                            tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_upg"), label = "upgrades", value = 0, width = entry_wid_l)),
+                            tags$div(class = "pf_ipt_ppm_div", numericInput(paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_rer"), label = "reserved", value = 0, width = entry_wid_l))
                           )
                         )
                       )
@@ -136,7 +136,16 @@ observe({
                   tags$div(
                     class = 'block_inner_frame',
                     actionButton(class = "btn-success", paste0("fp_ipt_ppm_",curr_ppty_id,"_enter"), "Enter into DB"),
-                    actionButton(class = "btn-primary", paste0("fp_ipt_ppm_",curr_ppty_id,"_clear"), "Clear from DB")
+                    actionButton(class = "btn-primary", paste0("fp_ipt_ppm_",curr_ppty_id,"_clear"), "Clear from DB"),
+                   
+                  ),
+                  tags$div(
+                    class = 'block_inner_frame',
+                    fileInput(
+                      paste0("fp_ipt_ppm_",curr_ppty_id,"_parse"), 
+                      "Please upload transactions file for parsing: ",
+                      multiple = FALSE,
+                      accept = c("text/csv", "text/comma-separated-values,text/plain", ".csv"))
                   )
                   
                 )
@@ -153,6 +162,26 @@ observe({
     observeEvent(input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_inc_rent")]], {
       
       updateNumericInput(session, paste0("fp_ipt_ppm_",curr_ppty_id,"_ppm_mgmtfee"), value = input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_inc_rent")]] * property_shownact()$exp_pm_fee_perc[i] * (1+property_shownact()$gst[i]))
+      
+    })
+    
+    observe({
+      
+      req(input[[paste0("fp_ipt_ppm_", curr_ppty_id, "_parse")]])
+      file_info <- input[[paste0("fp_ipt_ppm_", curr_ppty_id, "_parse")]]
+      trans <- read.csv(file_info$datapath, header = TRUE, stringsAsFactors = FALSE)
+      
+      lapply(1:nrow(trans), function(z){
+        
+        obj_id <- trans$FinHealInputID[z]
+        new_val <- trans$Value[z]
+        update_flag <- trans$FinHealUpdateFlag[z]
+        
+        if(update_flag == 1){
+          updateNumericInput(session, paste0("fp_ipt_ppm_",curr_ppty_id,"_", obj_id), value = new_val)  
+        }
+        
+      })
       
     })
     
