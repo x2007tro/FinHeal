@@ -138,16 +138,20 @@ observe({
                     actionButton(class = "btn-success", paste0("fp_ipt_ppm_",curr_ppty_id,"_enter"), "Enter into DB"),
                     actionButton(class = "btn-primary", paste0("fp_ipt_ppm_",curr_ppty_id,"_clear"), "Clear from DB"),
                    
-                  ),
+                  )
+                )
+              ),
+              fluidRow(
+                column(
+                  12,
                   tags$div(
                     class = 'block_inner_frame',
                     fileInput(
                       paste0("fp_ipt_ppm_",curr_ppty_id,"_parse"), 
-                      "Please upload transactions file for parsing: ",
+                      "Please upload transactions for parsing: ",
                       multiple = FALSE,
                       accept = c("text/csv", "text/comma-separated-values,text/plain", ".csv"))
                   )
-                  
                 )
               )
             )
@@ -174,7 +178,7 @@ observe({
       lapply(1:nrow(trans), function(z){
         
         obj_id <- trans$FinHealInputID[z]
-        new_val <- trans$Value[z]
+        new_val <- trans$Value[z]*trans$FlipSignForFinHeal[z]
         update_flag <- trans$FinHealUpdateFlag[z]
         
         if(update_flag == 1){
@@ -199,7 +203,7 @@ observe({
       
       # Process ppm expense
       showNotification("Transactions are being entered to DB...", type = 'message')
-      
+     
       dates <- input$pf_ipt_par_begdt
       desc <- c('rental income','Laundry income','Storage income','other income',
                 'mortgage principal','mortgage interest',
@@ -210,7 +214,7 @@ observe({
                  input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_mort_prl")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_mort_int")]],
                  input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_ppm_mgmtfee")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_ppm_lawncare")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_ppm_snowrem")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_ppm_phonebill")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_ppm_cleaning")]], 
                  input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_exp_pptytax")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_exp_util")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_exp_insu")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_exp_watnsew")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_exp_main")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_exp_strata")]],
-                 input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_1")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_2")]],  input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_3")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_4")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_5")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_6")]])
+                 input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_bkfee")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_rr")]],  input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_labor")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_eqp")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_upg")]], input[[paste0("fp_ipt_ppm_",curr_ppty_id,"_addi_rer")]])
       ppty <- curr_ppty_nm
       ctgr <- c('Rental Income','Laundry Income','Storage Income','Other Rental Income',
                 'Mortgage Principal','Mortgage Interest',
